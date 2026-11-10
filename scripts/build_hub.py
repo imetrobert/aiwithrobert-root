@@ -79,7 +79,7 @@ body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;colo
 .card img{width:64px;height:auto}.card h2{font-size:1.35rem;margin:12px 0 4px}.card h2 span{color:var(--accent-text)}
 .tag{font-weight:700;margin-bottom:10px;color:var(--accent-text)}.card p{color:#475569;line-height:1.55;margin-bottom:18px}
 .btn{display:inline-block;align-self:flex-start;margin-top:auto;padding:14px 26px;border-radius:12px;font-weight:700;text-decoration:none;font-size:1.05rem;background:var(--accent);color:var(--btn-text)}
-.btn::after{content:"";position:absolute;inset:0;border-radius:22px}.card:has(.btn:hover){transform:translateY(-3px);box-shadow:0 16px 36px rgba(17,48,76,.18)}.btn:hover{filter:brightness(.95)}.btn:focus-visible,.lang a:focus-visible{outline:3px solid #11304c;outline-offset:2px}.btn:focus-visible::after{outline:3px solid #11304c;outline-offset:2px}
+a.card{text-decoration:none;color:inherit;-webkit-tap-highlight-color:rgba(17,48,76,.08)}a.card:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(17,48,76,.18)}a.card:hover .btn{filter:brightness(.95)}.lang a:focus-visible{outline:3px solid #11304c;outline-offset:2px}a.card:focus-visible{outline:3px solid #11304c;outline-offset:3px}
 .card.soon{background:#fbfaf3}.btn.off{background:#e9e4cf;color:#6b5a14;cursor:default;pointer-events:none;border:2px dashed #c9a227}.early{margin-top:auto;font-size:.92rem;color:#475569}.early a{color:#11304c;font-weight:700}.badge{align-self:flex-start;background:#11304c;color:#fff;font-size:.75rem;font-weight:800;letter-spacing:.8px;text-transform:uppercase;border-radius:999px;padding:4px 12px;margin-bottom:10px}
 .more{color:#64748b;font-size:.95rem;margin:2rem 0 0;text-align:center}
 .foot{text-align:center;color:#475569;padding:2.4rem 20px 2.6rem;font-size:.95rem}.foot .contact{font-size:1.1rem;margin-bottom:.5rem}.foot .contact a{color:#11304c;font-weight:700}.foot .phone{font-size:.8rem;color:#94a3b8}.foot .phone a{color:#94a3b8;font-weight:400;white-space:nowrap}
@@ -89,18 +89,23 @@ def card(b, lang):
     t = b[lang]
     style = "--accent:%s;--accent-text:%s;--btn-text:%s" % (b["accent"], b["accent_text"], b["btn_text"])
     soon = b.get("soon")
-    head = ('<section class="card%s" style="%s">\n' % (" soon" if soon else "", style))
+    if soon:
+        head = '<section class="card soon" style="%s">\n' % style
+        close = "</section>"
+    else:
+        head = '<a class="card" href="%s" aria-label="%s" style="%s">\n' % (t["url"], t["aria"], style)
+        close = "</a>"
     if soon:
         head += '<span class="badge">%s</span>\n' % t["soon_btn"]
         action = '<p class="early">%s <a href="mailto:%s">%s</a></p>' % (t["early"], EMAIL, t["early_link"])
     else:
-        action = '<a class="btn" href="%s" aria-label="%s">%s</a>' % (t["url"], t["aria"], t["btn"])
+        action = '<span class="btn">%s</span>' % t["btn"]
     return (head +
         '<img src="%s" width="64" height="64" alt="%s">\n'
         '<h2>AI with Robert <span>%s</span></h2>\n'
         '<div class="tag">%s</div>\n'
-        '<p>%s</p>\n%s\n</section>'
-    ) % (b["logo"], t["alt"], t["suffix"], t["tag"], t["text"], action)
+        '<p>%s</p>\n%s\n%s'
+    ) % (b["logo"], t["alt"], t["suffix"], t["tag"], t["text"], action, close)
 
 def page(k):
     t = T[k]; url = BASE + t["path"]; en, fr = BASE + "/", BASE + "/fr/"
