@@ -11,6 +11,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE = "https://aiwithrobert.com"
 PHONE = "514-250-8491"
 EMAIL = "info@aiwithrobert.com"
+BIZ_EMAIL = "biz@aiwithrobert.com"  # Business card "get in touch"
 
 # Launch switches: while NOINDEX is True the page asks search engines not to list it.
 # Flip to False (and re-add sitemap.xml) when you are ready to be found in search.
@@ -98,7 +99,7 @@ def card(b, lang):
         close = "</a>"
     if soon:
         head += '<span class="badge">%s</span>\n' % t["soon_btn"]
-        action = '<p class="early">%s <a href="mailto:%s">%s</a></p>' % (t["early"], EMAIL, t["early_link"])
+        action = '<p class="early">%s <a href="mailto:%s">%s</a></p>' % (t["early"], BIZ_EMAIL, t["early_link"])
     else:
         action = '<span class="btn">%s</span>' % t["btn"]
     return (head +
