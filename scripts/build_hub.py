@@ -10,6 +10,7 @@ import os
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE = "https://aiwithrobert.com"
 PHONE = "514-250-8491"
+EMAIL = "info@imetrobert.com"
 
 # -- Sub-brands (add new ones here) -----------------------------------------
 BRANDS = [
@@ -44,7 +45,7 @@ T = {
   who="Robert Simon · 25+ years in technology · Côte Saint-Luc, Montréal · English &amp; French",
   choose="Choose the area you need help with",
   more="More areas will be added here as they launch.",
-  foot="Robert Simon · Côte Saint-Luc, Québec", langlabel="Language"),
+  foot="Robert Simon · Côte Saint-Luc, Québec", contact="Questions? Write to me at", langlabel="Language"),
  "fr": dict(path="/fr/", html_lang="fr-CA", og_locale="fr_CA",
   title="AI with Robert — De l’aide pratique en IA par un professionnel local de confiance",
   desc="De l’aide pratique en IA offerte par Robert Simon, professionnel local de confiance à Côte-Saint-Luc (Montréal). Choisissez le domaine qui vous intéresse.",
@@ -53,7 +54,7 @@ T = {
   who="Robert Simon · plus de 25 ans en technologie · Côte-Saint-Luc (Montréal) · français et anglais",
   choose="Choisissez le domaine qui vous intéresse",
   more="D’autres domaines s’ajouteront ici au fil de leur lancement.",
-  foot="Robert Simon · Côte-Saint-Luc (Québec)", langlabel="Langue"),
+  foot="Robert Simon · Côte-Saint-Luc (Québec)", contact="Une question? Écrivez-moi à", langlabel="Langue"),
 }
 
 CSS = """*{box-sizing:border-box;margin:0}html{-webkit-text-size-adjust:100%}
@@ -76,7 +77,7 @@ body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;colo
 .btn{display:inline-block;align-self:flex-start;margin-top:auto;padding:14px 26px;border-radius:12px;font-weight:700;text-decoration:none;font-size:1.05rem;background:var(--accent);color:var(--btn-text)}
 .btn:hover{filter:brightness(.95)}.btn:focus-visible,.lang a:focus-visible{outline:3px solid #11304c;outline-offset:2px}
 .more{color:#64748b;font-size:.95rem;margin:2rem 0 0;text-align:center}
-.foot{text-align:center;color:#475569;padding:2.2rem 20px 2.6rem;font-size:.95rem}.foot a{color:#11304c;font-weight:600;white-space:nowrap}
+.foot{text-align:center;color:#475569;padding:2.4rem 20px 2.6rem;font-size:.95rem}.foot .contact{font-size:1.1rem;margin-bottom:.5rem}.foot .contact a{color:#11304c;font-weight:700}.foot .phone{font-size:.8rem;color:#94a3b8}.foot .phone a{color:#94a3b8;font-weight:400;white-space:nowrap}
 @media(max-width:700px){.hero{padding:2.2rem 22px 4.5rem}.hero img{width:130px}.wm{font-size:2.3rem}.sub{font-size:1.25rem}.grid{grid-template-columns:1fr}}"""
 
 def card(b, lang):
@@ -141,7 +142,11 @@ def page(k):
 </div>
 <p class="more">{t["more"]}</p>
 </main>
-<footer class="foot">{t["foot"]} · <a href="{tel}">{PHONE}</a></footer>
+<footer class="foot">
+<p class="contact">{t["contact"]} <a href="mailto:{EMAIL}">{EMAIL}</a></p>
+<p>{t["foot"]}</p>
+<p class="phone"><a href="{tel}">{PHONE}</a></p>
+</footer>
 </body>
 </html>
 """
