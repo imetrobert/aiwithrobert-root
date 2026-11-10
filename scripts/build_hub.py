@@ -22,7 +22,7 @@ BRANDS = [
        accent="#3fa7e0", accent_text="#1f77ae", btn_text="#0b2540",
        en=dict(suffix="for Seniors", tag="One-on-one, patient, no jargon",
                text="Friendly AI and technology lessons for seniors, at home or online.",
-               btn="Visit the Seniors site →", url="https://seniors.aiwithrobert.com/",
+               btn="Visit the Seniors site →", url="https://seniors.aiwithrobert.com/?lang=en",
                alt="AI with Robert for Seniors logo", aria="Go to AI with Robert for Seniors"),
        fr=dict(suffix="pour aînés", tag="Individuel, patient, sans jargon",
                text="Cours conviviaux d’IA et de technologie pour aînés, à domicile ou en ligne.",
