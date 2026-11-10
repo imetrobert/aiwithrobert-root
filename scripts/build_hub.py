@@ -10,7 +10,7 @@ import os
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE = "https://aiwithrobert.com"
 PHONE = "514-250-8491"
-EMAIL = "info@imetrobert.com"
+EMAIL = "info@aiwithrobert.com"
 
 # -- Sub-brands (add new ones here) -----------------------------------------
 BRANDS = [
