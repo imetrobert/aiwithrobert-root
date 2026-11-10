@@ -12,6 +12,10 @@ BASE = "https://aiwithrobert.com"
 PHONE = "514-250-8491"
 EMAIL = "info@aiwithrobert.com"
 
+# Launch switches: while NOINDEX is True the page asks search engines not to list it.
+# Flip to False (and re-add sitemap.xml) when you are ready to be found in search.
+NOINDEX = True
+
 # -- Sub-brands (add new ones here) -----------------------------------------
 BRANDS = [
   dict(id="seniors", logo="/img/logo-seniors-128.png",
@@ -24,15 +28,15 @@ BRANDS = [
                text="Cours conviviaux d’IA et de technologie pour aînés, à domicile ou en ligne.",
                btn="Visiter le site pour aînés →", url="https://seniors.aiwithrobert.com/fr/",
                alt="Logo AI with Robert pour aînés", aria="Aller à AI with Robert pour aînés")),
-  dict(id="business", logo="/img/logo-business-128.png",
+  dict(id="business", soon=True, logo="/img/logo-business-128.png",
        accent="#c9a227", accent_text="#8a6d0b", btn_text="#11304c",
        en=dict(suffix="for Business", tag="Get more from the AI you already pay for",
                text="AI consulting, workflow automation and team training for small businesses.",
-               btn="Visit the Business site →", url="https://biz.aiwithrobert.com/",
+               btn="Visit the Business site →", soon_btn="Coming soon", early="Interested early?", early_link="Get in touch", url="https://biz.aiwithrobert.com/",
                alt="AI with Robert for Business logo", aria="Go to AI with Robert for Business"),
        fr=dict(suffix="pour entreprises", tag="Tirez plus de l’IA que vous payez déjà",
                text="Consultation en IA, automatisation des flux de travail et formation d’équipe pour les petites entreprises.",
-               btn="Visiter le site pour entreprises →", url="https://biz.aiwithrobert.com/fr/",
+               btn="Visiter le site pour entreprises →", soon_btn="Bientôt disponible", early="Intéressé dès maintenant?", early_link="Écrivez-moi", url="https://biz.aiwithrobert.com/fr/",
                alt="Logo AI with Robert pour entreprises", aria="Aller à AI with Robert pour entreprises")),
 ]
 
@@ -76,6 +80,7 @@ body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;colo
 .tag{font-weight:700;margin-bottom:10px;color:var(--accent-text)}.card p{color:#475569;line-height:1.55;margin-bottom:18px}
 .btn{display:inline-block;align-self:flex-start;margin-top:auto;padding:14px 26px;border-radius:12px;font-weight:700;text-decoration:none;font-size:1.05rem;background:var(--accent);color:var(--btn-text)}
 .btn:hover{filter:brightness(.95)}.btn:focus-visible,.lang a:focus-visible{outline:3px solid #11304c;outline-offset:2px}
+.card.soon{background:#fbfaf3}.btn.off{background:#e9e4cf;color:#6b5a14;cursor:default;pointer-events:none;border:2px dashed #c9a227}.early{margin-top:auto;font-size:.92rem;color:#475569}.early a{color:#11304c;font-weight:700}.badge{align-self:flex-start;background:#11304c;color:#fff;font-size:.75rem;font-weight:800;letter-spacing:.8px;text-transform:uppercase;border-radius:999px;padding:4px 12px;margin-bottom:10px}
 .more{color:#64748b;font-size:.95rem;margin:2rem 0 0;text-align:center}
 .foot{text-align:center;color:#475569;padding:2.4rem 20px 2.6rem;font-size:.95rem}.foot .contact{font-size:1.1rem;margin-bottom:.5rem}.foot .contact a{color:#11304c;font-weight:700}.foot .phone{font-size:.8rem;color:#94a3b8}.foot .phone a{color:#94a3b8;font-weight:400;white-space:nowrap}
 @media(max-width:700px){.hero{padding:2.2rem 22px 4.5rem}.hero img{width:130px}.wm{font-size:2.3rem}.sub{font-size:1.25rem}.grid{grid-template-columns:1fr}}"""
@@ -83,15 +88,19 @@ body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;colo
 def card(b, lang):
     t = b[lang]
     style = "--accent:%s;--accent-text:%s;--btn-text:%s" % (b["accent"], b["accent_text"], b["btn_text"])
-    return (
-        '<section class="card" style="%s">\n'
+    soon = b.get("soon")
+    head = ('<section class="card%s" style="%s">\n' % (" soon" if soon else "", style))
+    if soon:
+        head += '<span class="badge">%s</span>\n' % t["soon_btn"]
+        action = '<p class="early">%s <a href="mailto:%s">%s</a></p>' % (t["early"], EMAIL, t["early_link"])
+    else:
+        action = '<a class="btn" href="%s" aria-label="%s">%s</a>' % (t["url"], t["aria"], t["btn"])
+    return (head +
         '<img src="%s" width="64" height="64" alt="%s">\n'
         '<h2>AI with Robert <span>%s</span></h2>\n'
         '<div class="tag">%s</div>\n'
-        '<p>%s</p>\n'
-        '<a class="btn" href="%s" aria-label="%s">%s</a>\n'
-        '</section>'
-    ) % (style, b["logo"], t["alt"], t["suffix"], t["tag"], t["text"], t["url"], t["aria"], t["btn"])
+        '<p>%s</p>\n%s\n</section>'
+    ) % (b["logo"], t["alt"], t["suffix"], t["tag"], t["text"], action)
 
 def page(k):
     t = T[k]; url = BASE + t["path"]; en, fr = BASE + "/", BASE + "/fr/"
@@ -101,6 +110,7 @@ def page(k):
         sw = '<a href="/" hreflang="en-CA" lang="en">EN</a><span aria-current="true">FR</span>'
     cards = "\n".join(card(b, k) for b in BRANDS)
     tel = "tel:+1" + PHONE.replace("-", "")
+    robots = '<meta name="robots" content="noindex, follow">\n' if NOINDEX else ""
     return f"""<!DOCTYPE html>
 <html lang="{t["html_lang"]}">
 <head>
@@ -108,7 +118,7 @@ def page(k):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{t["title"]}</title>
 <meta name="description" content="{t["desc"]}">
-<link rel="canonical" href="{url}">
+{robots}<link rel="canonical" href="{url}">
 <link rel="alternate" hreflang="en-CA" href="{en}">
 <link rel="alternate" hreflang="fr-CA" href="{fr}">
 <link rel="alternate" hreflang="x-default" href="{en}">
