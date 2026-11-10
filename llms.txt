@@ -1,0 +1,10 @@
+# AI with Robert
+
+> Practical AI training and strategy from Robert Simon, based in Côte Saint-Luc, Montréal (Québec, Canada). Bilingual: English and French. Phone: 514-250-8491.
+
+AI with Robert has two branches:
+
+- [AI with Robert for Seniors](https://seniors.aiwithrobert.com/): one-on-one, patient AI and technology lessons for seniors, at home or online. French: https://seniors.aiwithrobert.com/fr/
+- [AI with Robert for Business](https://biz.aiwithrobert.com/): AI strategy, team training and workflow automation for small and mid-sized businesses (free discovery call). French: https://biz.aiwithrobert.com/fr/
+
+Hub (this site): https://aiwithrobert.com/ (English), https://aiwithrobert.com/fr/ (French).

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Legacy sitemap for the old root domain. These URLs redirect to
-  https://seniors.aiwithrobert.com/ (and /fr/). Kept so Google keeps
-  re-visiting the old URLs and sees the redirects. Remove or replace when
-  the aiwithrobert.com hub homepage launches.
--->
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://aiwithrobert.com/</loc>
-    <lastmod>2026-11-09</lastmod>
+    <lastmod>2026-11-10</lastmod>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://aiwithrobert.com/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://aiwithrobert.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://aiwithrobert.com/"/>
   </url>
   <url>
     <loc>https://aiwithrobert.com/fr/</loc>
-    <lastmod>2026-11-09</lastmod>
+    <lastmod>2026-11-10</lastmod>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://aiwithrobert.com/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://aiwithrobert.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://aiwithrobert.com/"/>
   </url>
 </urlset>
