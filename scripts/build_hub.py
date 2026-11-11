@@ -49,7 +49,7 @@ T = {
   sub="Practical AI help from a local, trusted professional.",
   who="Robert Simon · 25+ years in technology · Côte Saint-Luc, Montréal · English &amp; French",
   choose="Choose the area you need help with",
-  foot="Robert Simon · Côte Saint-Luc, Québec", contact="Questions? Write to me at", langlabel="Language"),
+  foot="Robert Simon · Côte Saint-Luc, Québec", indep="AI with Robert is an independent practice of Robert Simon. It is not affiliated with, sponsored by or endorsed by any employer, including Bell Canada.", contact="Questions? Write to me at", langlabel="Language"),
  "fr": dict(path="/fr/", html_lang="fr-CA", og_locale="fr_CA",
   title="AI with Robert — De l’aide pratique en IA par un professionnel local de confiance",
   desc="De l’aide pratique en IA offerte par Robert Simon, professionnel local de confiance à Côte-Saint-Luc (Montréal). Choisissez le domaine qui vous intéresse.",
@@ -57,7 +57,7 @@ T = {
   sub="De l’aide pratique en IA, offerte par un professionnel local de confiance.",
   who="Robert Simon · plus de 25 ans en technologie · Côte-Saint-Luc (Montréal) · français et anglais",
   choose="Choisissez le domaine qui vous intéresse",
-  foot="Robert Simon · Côte-Saint-Luc (Québec)", contact="Une question? Écrivez-moi à", langlabel="Langue"),
+  foot="Robert Simon · Côte-Saint-Luc (Québec)", indep="AI with Robert est une pratique indépendante de Robert Simon. Elle n’est affiliée à aucun employeur, ni commanditée ou approuvée par aucun d’eux, y compris Bell Canada.", contact="Une question? Écrivez-moi à", langlabel="Langue"),
 }
 
 CSS = """*{box-sizing:border-box;margin:0}html{-webkit-text-size-adjust:100%}
@@ -80,7 +80,7 @@ body:after{content:"";position:absolute;z-index:-1;left:0;right:0;top:0;height:5
 .btn{display:inline-block;align-self:flex-start;margin-top:auto;padding:14px 26px;border-radius:12px;font-weight:700;text-decoration:none;font-size:1.05rem;background:var(--accent);color:var(--btn-text)}
 a.card{text-decoration:none;color:inherit;-webkit-tap-highlight-color:rgba(17,48,76,.08)}a.card:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(17,48,76,.18)}a.card:hover .btn{filter:brightness(.95)}.lang a:focus-visible{outline:3px solid #11304c;outline-offset:2px}a.card:focus-visible{outline:3px solid #11304c;outline-offset:3px}
 .card.soon{background:#fbfaf3}.btn.off{background:#e9e4cf;color:#6b5a14;cursor:default;pointer-events:none;border:2px dashed #c9a227}.early{margin-top:auto;font-size:.92rem;color:#475569}.early a{color:#11304c;font-weight:700}.badge{align-self:flex-start;background:#11304c;color:#fff;font-size:.75rem;font-weight:800;letter-spacing:.8px;text-transform:uppercase;border-radius:999px;padding:4px 12px;margin-bottom:10px}
-.foot{position:relative;margin-top:110px;background:#1f3050;color:#e6ecf3;text-align:center;padding:1.6rem 20px 2.6rem;font-size:.95rem}.foot:before{content:"";position:absolute;left:0;right:0;top:-79px;height:80px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 80' preserveAspectRatio='none'%3E%3Cpath fill='%2356aeaa' d='M0,34 C380,2 960,-4 1440,60 L1440,80 L0,80Z'/%3E%3Cpath fill='%231f3050' d='M0,48 C380,16 960,10 1440,68 L1440,80 L0,80Z'/%3E%3C/svg%3E") bottom/100% 100% no-repeat}.foot .contact{font-size:1.1rem;margin-bottom:.5rem}.foot .contact a{color:#fff;font-weight:700}.foot .phone{font-size:.8rem;color:#9fb0c6}.foot .phone a{color:#9fb0c6;font-weight:400;white-space:nowrap}
+.foot{position:relative;margin-top:110px;background:#1f3050;color:#e6ecf3;text-align:center;padding:1.6rem 20px 2.6rem;font-size:.95rem}.foot:before{content:"";position:absolute;left:0;right:0;top:-79px;height:80px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 80' preserveAspectRatio='none'%3E%3Cpath fill='%2356aeaa' d='M0,34 C380,2 960,-4 1440,60 L1440,80 L0,80Z'/%3E%3Cpath fill='%231f3050' d='M0,48 C380,16 960,10 1440,68 L1440,80 L0,80Z'/%3E%3C/svg%3E") bottom/100% 100% no-repeat}.foot .contact{font-size:1.1rem;margin-bottom:.5rem}.foot .contact a{color:#fff;font-weight:700}.foot .indep{font-size:.78rem;line-height:1.45;color:#9fb0c6;max-width:34rem;margin:.9rem auto 0}.foot .phone{font-size:.8rem;color:#9fb0c6}.foot .phone a{color:#9fb0c6;font-weight:400;white-space:nowrap}
 @media(min-width:1300px){body:before{content:"";position:fixed;z-index:-1;left:0;top:0;bottom:0;width:9vw;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath fill='%2356aeaa' d='M56,0 L66,0 C94,32 56,68 86,100 L72,100 C42,68 80,32 56,0Z'/%3E%3Cpath fill='%231f3050' d='M0,0 L56,0 C80,32 42,68 72,100 L0,100Z'/%3E%3C/svg%3E") left top/100% 100% no-repeat}}
 @media(max-width:700px){.hero{padding:2.2rem 22px 4.5rem}.hero img{width:130px}.wm{font-size:2.3rem}.sub{font-size:1.25rem}.grid{grid-template-columns:1fr}}"""
 
@@ -115,7 +115,7 @@ def jsonld(k):
     the WebSite, and links to the two service entities that live on their own sites.
     No address, ratings or social profiles are asserted that are not on the page."""
     t = T[k]; url = BASE + t["path"]
-    org, person = BASE + "/#organization", BASE + "/#robert-simon"
+    org, person = BASE + "/#organization", "https://www.imetrobert.com/#robert-simon"  # master Person id, defined on imetrobert.com
     graph = [
         {"@type": "Organization", "@id": org, "name": "AI with Robert", "url": BASE + "/",
          "logo": BASE + "/icon-512.png", "email": EMAIL, "telephone": "+1-" + PHONE,
@@ -124,8 +124,8 @@ def jsonld(k):
          "areaServed": {"@type": "AdministrativeArea", "name": "Greater Montr\u00e9al"},
          "knowsLanguage": ["en", "fr"],
          "subOrganization": [{"@id": SEN_ID}, {"@id": BIZ_ID}]},
-        {"@type": "Person", "@id": person, "name": "Robert Simon", "url": BASE + "/",
-         "worksFor": {"@id": org}, "sameAs": ["https://www.imetrobert.com"]},
+        {"@type": "Person", "@id": person, "name": "Robert Simon", "url": "https://www.imetrobert.com/",
+         "worksFor": {"@id": org}},
         {"@type": "WebSite", "@id": BASE + "/#website", "url": BASE + "/", "name": "AI with Robert",
          "publisher": {"@id": org}, "inLanguage": ["en-CA", "fr-CA"]},
         {"@type": "WebPage", "@id": url + "#webpage", "url": url, "name": t["title"],
@@ -186,6 +186,7 @@ def page(k):
 <p class="contact">{t["contact"]} <a href="mailto:{EMAIL}">{EMAIL}</a></p>
 <p>{t["foot"]}</p>
 <p class="phone"><a href="{tel}">{PHONE}</a></p>
+<p class="indep">{t["indep"]}</p>
 </footer>
 </body>
 </html>
