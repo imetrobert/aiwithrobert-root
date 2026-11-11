@@ -13,9 +13,9 @@ PHONE = "514-250-8491"
 EMAIL = "info@aiwithrobert.com"
 BIZ_EMAIL = "biz@aiwithrobert.com"  # Business card "get in touch"
 
-# Launch switches: while NOINDEX is True the page asks search engines not to list it.
-# Flip to False (and re-add sitemap.xml) when you are ready to be found in search.
-NOINDEX = True
+# Launch switch: while NOINDEX is True the page asks search engines not to list it.
+# (False since the Business launch; sitemap.xml is in the repo root.)
+NOINDEX = False
 
 # -- Sub-brands (add new ones here) -----------------------------------------
 BRANDS = [
@@ -29,11 +29,11 @@ BRANDS = [
                text="Cours conviviaux d’IA et de technologie pour aînés, à domicile ou en ligne.",
                btn="Visiter le site pour aînés →", url="https://seniors.aiwithrobert.com/fr/",
                alt="Logo AI with Robert pour aînés", aria="Aller à AI with Robert pour aînés")),
-  dict(id="business", soon=True, logo="/img/logo-business-128.png",
+  dict(id="business", logo="/img/logo-business-128.png",
        accent="#c9a227", accent_text="#8a6d0b", btn_text="#11304c",
        en=dict(suffix="for Business", tag="Get more from the AI you already pay for",
                text="AI consulting, workflow automation and team training for small businesses.",
-               btn="Visit the Business site →", soon_btn="Coming soon", early="Interested early?", early_link="Get in touch", url="https://biz.aiwithrobert.com/",
+               btn="Visit the Business site →", soon_btn="Coming soon", early="Interested early?", early_link="Get in touch", url="https://biz.aiwithrobert.com/?lang=en",
                alt="AI with Robert for Business logo", aria="Go to AI with Robert for Business"),
        fr=dict(suffix="pour entreprises", tag="Tirez plus de l’IA que vous payez déjà",
                text="Consultation en IA, automatisation des flux de travail et formation d’équipe pour les petites entreprises.",
