@@ -125,6 +125,7 @@ def jsonld(k):
          "founder": {"@id": person},
          "areaServed": {"@type": "AdministrativeArea", "name": "Greater Montr\u00e9al"},
          "knowsLanguage": ["en", "fr"],
+         "sameAs": ["https://www.linkedin.com/company/aiwithrobert/"],
          "subOrganization": [{"@id": SEN_ID}, {"@id": BIZ_ID}]},
         {"@type": "Person", "@id": person, "name": "Robert Simon", "url": "https://www.imetrobert.com/",
          "sameAs": ["https://www.imetrobert.com/", "https://www.linkedin.com/in/thedigitalrobert"],

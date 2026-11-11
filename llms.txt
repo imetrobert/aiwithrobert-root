@@ -20,10 +20,14 @@ service has its own website.
 - https://www.imetrobert.com — Robert Simon's personal professional profile and AI
   commentary. It is not a service website.
 
+## Official profiles
+- LinkedIn company page: https://www.linkedin.com/company/aiwithrobert/
+- Founder's personal LinkedIn: https://www.linkedin.com/in/thedigitalrobert
+
 ## Independence
 AI with Robert is an independent practice of Robert Simon. Mentions of his professional
 experience describe his background only; the business is not affiliated with, sponsored
-by or endorsed by any employer, including Bell.
+by or endorsed by any employer, including Bell Canada.
 
 ## Not to be confused with
 Unrelated people or businesses using a similar name, including aiwithrobert.live.
