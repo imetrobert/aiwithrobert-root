@@ -106,6 +106,33 @@ def card(b, lang):
         '<p>%s</p>\n%s\n%s'
     ) % (b["logo"], t["alt"], t["suffix"], t["tag"], t["text"], action, close)
 
+import json
+SEN_ID = "https://seniors.aiwithrobert.com/#business"
+BIZ_ID = "https://biz.aiwithrobert.com/#business"
+
+def jsonld(k):
+    """Brand-level graph: one Organization (the parent brand), the person behind it,
+    the WebSite, and links to the two service entities that live on their own sites.
+    No address, ratings or social profiles are asserted that are not on the page."""
+    t = T[k]; url = BASE + t["path"]
+    org, person = BASE + "/#organization", BASE + "/#robert-simon"
+    graph = [
+        {"@type": "Organization", "@id": org, "name": "AI with Robert", "url": BASE + "/",
+         "logo": BASE + "/icon-512.png", "email": EMAIL, "telephone": "+1-" + PHONE,
+         "description": "Practical AI help from Robert Simon in Greater Montr\u00e9al: AI tutoring for seniors and AI consulting for small businesses.",
+         "founder": {"@id": person},
+         "areaServed": {"@type": "AdministrativeArea", "name": "Greater Montr\u00e9al"},
+         "knowsLanguage": ["en", "fr"],
+         "subOrganization": [{"@id": SEN_ID}, {"@id": BIZ_ID}]},
+        {"@type": "Person", "@id": person, "name": "Robert Simon", "url": BASE + "/",
+         "worksFor": {"@id": org}, "sameAs": ["https://www.imetrobert.com"]},
+        {"@type": "WebSite", "@id": BASE + "/#website", "url": BASE + "/", "name": "AI with Robert",
+         "publisher": {"@id": org}, "inLanguage": ["en-CA", "fr-CA"]},
+        {"@type": "WebPage", "@id": url + "#webpage", "url": url, "name": t["title"],
+         "isPartOf": {"@id": BASE + "/#website"}, "about": {"@id": org}, "inLanguage": t["html_lang"]},
+    ]
+    return '<script type="application/ld+json">\n' + json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False, indent=1) + "\n</script>\n"
+
 def page(k):
     t = T[k]; url = BASE + t["path"]; en, fr = BASE + "/", BASE + "/fr/"
     if k == "en":
@@ -140,7 +167,7 @@ def page(k):
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <style>{CSS}</style>
-</head>
+{jsonld(k)}</head>
 <body>
 <div class="top"><nav class="lang" aria-label="{t["langlabel"]}">{sw}</nav></div>
 <header class="hero">
