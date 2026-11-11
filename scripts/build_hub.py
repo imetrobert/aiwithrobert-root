@@ -19,26 +19,26 @@ NOINDEX = False
 
 # -- Sub-brands (add new ones here) -----------------------------------------
 BRANDS = [
-  dict(id="seniors", logo="/img/logo-seniors-128.png",
+  dict(id="seniors", logo="/img/logo-seniors-128.png", hero="/img/hero-seniors-640",
        accent="#3fa7e0", accent_text="#1f77ae", btn_text="#0b2540",
        en=dict(suffix="for Seniors", tag="One-on-one, patient, no jargon",
                text="Friendly AI and technology lessons for seniors, at home or online.",
                btn="Visit the Seniors site →", url="https://seniors.aiwithrobert.com/?lang=en",
-               alt="AI with Robert for Seniors logo", aria="Go to AI with Robert for Seniors"),
+               alt="AI with Robert for Seniors logo", hero_alt="Seniors learning to use AI together on laptops", aria="Go to AI with Robert for Seniors"),
        fr=dict(suffix="pour aînés", tag="Individuel, patient, sans jargon",
                text="Cours conviviaux d’IA et de technologie pour aînés, à domicile ou en ligne.",
                btn="Visiter le site pour aînés →", url="https://seniors.aiwithrobert.com/fr/",
-               alt="Logo AI with Robert pour aînés", aria="Aller à AI with Robert pour aînés")),
-  dict(id="business", logo="/img/logo-business-128.png",
+               alt="Logo AI with Robert pour aînés", hero_alt="Des aînés apprennent ensemble à utiliser l’IA sur des portables", aria="Aller à AI with Robert pour aînés")),
+  dict(id="business", logo="/img/logo-business-128.png", hero="/img/hero-business-640",
        accent="#c9a227", accent_text="#8a6d0b", btn_text="#11304c",
        en=dict(suffix="for Business", tag="Get more from the AI you already pay for",
                text="AI consulting, workflow automation and team training for small businesses.",
                btn="Visit the Business site →", soon_btn="Coming soon", early="Interested early?", early_link="Get in touch", url="https://biz.aiwithrobert.com/?lang=en",
-               alt="AI with Robert for Business logo", aria="Go to AI with Robert for Business"),
+               alt="AI with Robert for Business logo", hero_alt="A business owner at a laptop with AI workflow icons", aria="Go to AI with Robert for Business"),
        fr=dict(suffix="pour entreprises", tag="Tirez plus de l’IA que vous payez déjà",
                text="Consultation en IA, automatisation des flux de travail et formation d’équipe pour les petites entreprises.",
                btn="Visiter le site pour entreprises →", soon_btn="Bientôt disponible", early="Intéressé dès maintenant?", early_link="Écrivez-moi", url="https://biz.aiwithrobert.com/fr/",
-               alt="Logo AI with Robert pour entreprises", aria="Aller à AI with Robert pour entreprises")),
+               alt="Logo AI with Robert pour entreprises", hero_alt="Un propriétaire d’entreprise à son portable, avec des icônes de flux de travail IA", aria="Aller à AI with Robert pour entreprises")),
 ]
 
 T = {
@@ -75,7 +75,7 @@ body:after{content:"";position:absolute;z-index:-1;left:0;right:0;top:0;height:5
 .areas h1:before{content:"";position:absolute;top:-3.6rem;left:50%;height:3rem;border-left:3px solid #08a59c}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;text-align:left}
 .card{background:#fff;border-radius:22px;padding:28px;box-shadow:0 12px 32px rgba(17,48,76,.12);border-top:8px solid var(--accent);display:flex;flex-direction:column;position:relative;transition:transform .15s,box-shadow .15s}
-.card img{width:64px;height:auto}.card h2{font-size:1.35rem;margin:12px 0 4px}.card h2 span{color:var(--accent-text)}
+.card{overflow:hidden}.card .hero-img{display:block;margin:-28px -28px 20px;line-height:0}.card .hero-img img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;display:block}.card img{width:64px;height:auto}.card h2{font-size:1.35rem;margin:12px 0 4px}.card h2 span{color:var(--accent-text)}
 .tag{font-weight:700;margin-bottom:10px;color:var(--accent-text)}.card p{color:#475569;line-height:1.55;margin-bottom:18px}
 .btn{display:inline-block;align-self:flex-start;margin-top:auto;padding:14px 26px;border-radius:12px;font-weight:700;text-decoration:none;font-size:1.05rem;background:var(--accent);color:var(--btn-text)}
 a.card{text-decoration:none;color:inherit;-webkit-tap-highlight-color:rgba(17,48,76,.08)}a.card:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(17,48,76,.18)}a.card:hover .btn{filter:brightness(.95)}.lang a:focus-visible{outline:3px solid #11304c;outline-offset:2px}a.card:focus-visible{outline:3px solid #11304c;outline-offset:3px}
@@ -99,7 +99,9 @@ def card(b, lang):
         action = '<p class="early">%s <a href="mailto:%s">%s</a></p>' % (t["early"], BIZ_EMAIL, t["early_link"])
     else:
         action = '<span class="btn">%s</span>' % t["btn"]
-    return (head +
+    hero = ('<picture class="hero-img"><source srcset="%s.webp" type="image/webp">'
+            '<img src="%s.jpg" width="640" height="360" alt="%s"></picture>\n') % (b["hero"], b["hero"], t["hero_alt"])
+    return (head + hero +
         '<img src="%s" width="64" height="64" alt="%s">\n'
         '<h2>AI with Robert <span>%s</span></h2>\n'
         '<div class="tag">%s</div>\n'
