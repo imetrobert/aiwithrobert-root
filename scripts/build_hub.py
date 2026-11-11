@@ -127,6 +127,7 @@ def jsonld(k):
          "knowsLanguage": ["en", "fr"],
          "subOrganization": [{"@id": SEN_ID}, {"@id": BIZ_ID}]},
         {"@type": "Person", "@id": person, "name": "Robert Simon", "url": "https://www.imetrobert.com/",
+         "sameAs": ["https://www.imetrobert.com/", "https://www.linkedin.com/in/thedigitalrobert"],
          "worksFor": {"@id": org}},
         {"@type": "WebSite", "@id": BASE + "/#website", "url": BASE + "/", "name": "AI with Robert",
          "publisher": {"@id": org}, "inLanguage": ["en-CA", "fr-CA"]},
