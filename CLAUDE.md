@@ -25,6 +25,7 @@ them when `scripts/build_hub.py` changes on `main`; locally: `python3 scripts/bu
 | `sitemap.xml`, `robots.txt` | Sitemap for `/` and `/fr/`; robots advertises it |
 | `404.html` | Path-preserving redirect for old aiwithrobert.com URLs to seniors.aiwithrobert.com |
 | `seniors/`, `seniors/fr/`, `aines/` | Noindex redirect pages to the seniors site |
+| `feasibility/`, `feasability/` (misspelling), `faisabilite/` | Noindex redirects to the free feasibility check on the Business site (EN `/#feas-check`, FR `/fr/#feas-check`). Short links to send clients |
 | `business/`, `business/fr/`, `biz/`, `biz/fr/`, `entreprises/`, `affaires/` | Noindex redirect pages to biz.aiwithrobert.com |
 
 Redirect pages stay noindex and unlisted in the sitemap. The hub's JSON-LD (Organization
