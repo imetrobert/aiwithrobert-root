@@ -30,10 +30,10 @@ SITES = [
     ("Blog home", ["https://www.imetrobert.com/"], "Robert"),
     ("Blog index", ["https://www.imetrobert.com/blog/"], None),
     ("Blog latest post", ["https://www.imetrobert.com/blog/posts/latest.html"], None),
-    ("Blog feed", ["https://www.imetrobert.com/feed.xml"], None),
+    ("Blog feed", ["https://www.imetrobert.com/blog/feed.xml"], None),
     ("Toolkit", ["https://toolkit.aiwithrobert.com/"], None),
     ("Invoicing app", ["https://invoices.imetrobert.com/", "https://invoices.aiwithrobert.com/"], None),
-    ("ETF tracker", ["https://etf.imetrobert.com/"], None),
+    ("ETF tracker", ["https://invest.imetrobert.com/"], None),
     ("Marketplace generator", ["https://fbmarket.imetrobert.com/"], None),
     ("Claims tracker", ["https://tax.imetrobert.com/"], None),
     ("Job search", ["https://jobs.imetrobert.com/"], None),
@@ -44,7 +44,7 @@ REPOS = ["aiwithrobert", "aiwithrobert-biz", "aiwithrobert-root", "aiwithrobert-
          "imetrobert.github.io", "claims-tracker", "jobs", "Supabase-platform-"]
 DOMAINS = {"aiwithrobert.com": "com", "imetrobert.com": "com"}
 TLS_HOSTS = ["aiwithrobert.com", "seniors.aiwithrobert.com", "biz.aiwithrobert.com", "www.imetrobert.com",
-             "toolkit.aiwithrobert.com", "etf.imetrobert.com", "fbmarket.imetrobert.com", "tax.imetrobert.com",
+             "toolkit.aiwithrobert.com", "invest.imetrobert.com", "fbmarket.imetrobert.com", "tax.imetrobert.com",
              "jobs.imetrobert.com", "access.imetrobert.com"]
 TLS_WARN_DAYS, DOMAIN_WARN_DAYS, ITEM_WARN_DAYS, RUN_MAX_AGE_DAYS = 10, 45, 14, 21
 
