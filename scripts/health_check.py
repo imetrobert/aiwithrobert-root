@@ -181,6 +181,17 @@ def check_items(path, today):
     return rows, notes
 
 
+# One line of "what to do" shown under a section that has a FAIL, so the summary alone is enough to act on.
+HINTS = {
+    "Live sites": "Reload the site yourself. Still down: open the repo's Settings > Pages (is it published?) and its Actions tab (did the last deploy fail?).",
+    "Supabase": "Check https://status.supabase.com, then https://supabase.com/dashboard/project/ipnajvgwtjrlecbqfwrh (a paused project has a Restore button). All sign-ins depend on it.",
+    "Latest automated runs in every repo": "Open that repo's Actions tab, tap the red run and read the error. Key or token errors include the fix steps; every key is listed in docs/KEYS.md. An old red clears itself after the next green run.",
+    "TLS certificates": "In the repo's Settings > Pages turn Enforce HTTPS off and on again; if the domain is not verified, check DNS at Name Services.",
+    "Domain registration": "Renew the domain at Name Services (billing), then the date here clears by itself.",
+    "Renewals you track": "Renew the item named, then update its date in ops/expiries.json (https://github.com/imetrobert/aiwithrobert-root/edit/main/ops/expiries.json).",
+}
+
+
 def render(sections, notes):
     out, failed = ["# Weekly health check", f"_{dt.datetime.now(dt.timezone.utc):%Y-%m-%d %H:%M} UTC_", ""], 0
     for title, rows in sections:
@@ -189,6 +200,8 @@ def render(sections, notes):
         out.append(f"## {title}: {'ALL OK' if not bad else str(len(bad)) + ' NEED ACTION'}")
         for ok, label, detail in rows:
             out.append(f"- {'OK' if ok else '**FAIL**'} {label}: {detail}")
+        if bad and title in HINTS:
+            out.append(f"  - **What to do:** {HINTS[title]}")
         out.append("")
     if notes:
         out.append("## Notes (do not fail the check)")
