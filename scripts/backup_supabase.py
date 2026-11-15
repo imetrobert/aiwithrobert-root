@@ -12,6 +12,7 @@ import datetime as dt
 import json
 import os
 import sys
+import urllib.error
 import urllib.request
 
 URL = os.environ.get("SUPABASE_URL", "https://ipnajvgwtjrlecbqfwrh.supabase.co").rstrip("/")
@@ -19,6 +20,9 @@ URL = os.environ.get("SUPABASE_URL", "https://ipnajvgwtjrlecbqfwrh.supabase.co")
 # (a view cannot be restored into).
 EXCLUDE = {"etf_prices", "invoice_public_v", "invoices_et", "job_ranked"}
 PAGE = 1000
+
+
+DASHBOARD_KEYS = "https://supabase.com/dashboard/project/ipnajvgwtjrlecbqfwrh/settings/api-keys"
 
 
 def get(path, key, rng=None):
@@ -49,7 +53,17 @@ def main(out):
     if not key:
         sys.exit("SUPABASE_SERVICE_KEY is not set. Add it under Settings > Secrets and variables > Actions.")
     os.makedirs(out, exist_ok=True)
-    tables, manifest, failed = list_tables(key), {}, []
+    try:
+        tables = list_tables(key)
+    except urllib.error.HTTPError as e:
+        if e.code in (401, 403):
+            sys.exit(
+                "Supabase rejected the backup key (SUPABASE_SERVICE_KEY): it expired, was rotated or was deleted. To fix: "
+                "1) Open %s and create a new secret key named backups. "
+                "2) Open https://github.com/imetrobert/aiwithrobert-root/settings/secrets/actions, tap SUPABASE_SERVICE_KEY, paste it, Update secret. "
+                "3) Re-run the Weekly backup workflow. 4) Delete the old key on the Supabase page." % DASHBOARD_KEYS)
+        raise
+    manifest, failed = {}, []
     if not tables:
         sys.exit("No tables found: the key may be wrong (anon keys see nothing). Nothing was saved.")
     for t in tables:
