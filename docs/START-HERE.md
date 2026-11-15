@@ -30,6 +30,9 @@ All share ONE Supabase project and one login. Who can open what is set at access
   safe. Green: Merge. Red: leave it, or paste the failing log to Claude.
 - Blog: Actions > Blog health report; Pipeline health page on the review page; `docs/DIAGNOSE.md` in the blog repo.
 
+## Search and AI-answer visibility
+`docs/SEO-AIO-GEO.md`: what is automatic, a 10-minute monthly routine and paste-ready prompts (add a guide, fix a Search Console issue, turn on the rating schema).
+
 ## Keys and secrets
 `docs/KEYS.md` lists every key and secret, what breaks when one dies and the link to replace it.
 
