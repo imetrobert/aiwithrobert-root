@@ -6,9 +6,12 @@ GitHub emails the owner. Standard library only. Sections: live sites, Supabase, 
 repo's workflows, TLS certificates, domain registration, and ops/expiries.json.
 Run locally: python3 scripts/health_check.py   (needs network)
 """
+import concurrent.futures
 import datetime as dt
+import email.utils
 import json
 import os
+import re
 import socket
 import ssl
 import sys
@@ -46,6 +49,15 @@ DOMAINS = {"aiwithrobert.com": "com", "imetrobert.com": "com"}
 TLS_HOSTS = ["aiwithrobert.com", "seniors.aiwithrobert.com", "biz.aiwithrobert.com", "www.imetrobert.com",
              "toolkit.aiwithrobert.com", "invest.imetrobert.com", "fbmarket.imetrobert.com", "tax.imetrobert.com",
              "jobs.imetrobert.com", "access.imetrobert.com"]
+# (label, home page, Google Analytics id that must be in the page or None)
+CONTENT_SITES = [
+    ("Hub", "https://aiwithrobert.com/", None),
+    ("Seniors site", "https://seniors.aiwithrobert.com/", "G-DM4EY880K2"),
+    ("Business site", "https://biz.aiwithrobert.com/", None),
+    ("Blog and personal site", "https://www.imetrobert.com/", "G-Y0FZTVVLBS"),
+]
+BLOG_FEED = "https://www.imetrobert.com/blog/feed.xml"
+BLOG_MAX_AGE_DAYS = 40          # a monthly issue is due on the 1st; 40 days without a new one means a missed or unapproved issue
 TLS_WARN_DAYS, DOMAIN_WARN_DAYS, ITEM_WARN_DAYS, RUN_MAX_AGE_DAYS = 10, 45, 14, 21
 
 
@@ -81,6 +93,69 @@ def check_sites():
             problems.append(f"{u}: {err or ('HTTP %d' % code) if code != 200 else 'missing text ' + repr(needle)}")
         else:
             rows.append((False, label, "; ".join(problems)))
+    return rows
+
+
+def host_of(url):
+    return url.split("/")[2]
+
+
+def check_content(today):
+    """Silent breakages the plain 'is it up' check cannot see: accidental noindex or robots block, broken JSON-LD,
+    lost analytics tag, dead sitemap URLs, the Business feasibility table, and a missed monthly blog issue."""
+    rows = []
+    for label, url, ga in CONTENT_SITES:
+        code, body, err = fetch(url)
+        if code != 200:
+            rows.append((False, f"{label}: home page", err or f"HTTP {code}"))
+            continue
+        problems = []
+        if re.search(r'<meta[^>]+name=["\']robots["\'][^>]*noindex', body, re.I):
+            problems.append("home page has a noindex tag (hidden from Google)")
+        bad_ld = 0
+        for block in re.findall(r'<script[^>]+application/ld\+json[^>]*>(.*?)</script>', body, re.S | re.I):
+            try:
+                json.loads(block)
+            except Exception:
+                bad_ld += 1
+        if bad_ld:
+            problems.append(f"{bad_ld} JSON-LD block(s) are not valid JSON")
+        if ga and ga not in body:
+            problems.append(f"analytics tag {ga} is missing")
+        rcode, rbody, _ = fetch(f"https://{host_of(url)}/robots.txt", tries=2, limit=20000)
+        if rcode == 200 and re.search(r"^\s*Disallow:\s*/\s*$", rbody, re.M | re.I):
+            problems.append("robots.txt blocks the whole site")
+        rows.append((not problems, f"{label}: page, schema, analytics, robots", "; ".join(problems) or "ok"))
+
+    for sm in sorted({f"https://{host_of(u)}/sitemap.xml" for _, u, _ in CONTENT_SITES}):
+        code, body, err = fetch(sm, tries=2)
+        if code != 200:
+            rows.append((False, f"Sitemap {host_of(sm)}", err or f"HTTP {code}"))
+            continue
+        urls = re.findall(r"<loc>\s*([^<\s]+)\s*</loc>", body)
+        with concurrent.futures.ThreadPoolExecutor(max_workers=8) as ex:
+            results = list(ex.map(lambda u: (u, fetch(u, tries=2, limit=2000)[0]), urls))
+        dead = [f"{u} (HTTP {c})" for u, c in results if c != 200]
+        rows.append((bool(urls) and not dead, f"Sitemap {host_of(sm)}: {len(urls)} URLs",
+                     "; ".join(dead[:5]) + (f" and {len(dead) - 5} more" if len(dead) > 5 else "") if dead else ("ok" if urls else "no URLs listed")))
+
+    req = urllib.request.Request(SUPABASE + "/rest/v1/rpc/public_caps", method="POST", data=b"{}",
+                                 headers={"apikey": ANON, "Content-Type": "application/json", "User-Agent": "awr-health-check"})
+    try:
+        with urllib.request.urlopen(req, timeout=20) as r:
+            ok = r.status == 200 and isinstance(json.loads(r.read()), dict)
+        rows.append((ok, "Feasibility check table (public_caps)", "ok" if ok else "unexpected answer"))
+    except Exception as e:
+        rows.append((False, "Feasibility check table (public_caps)", f"{type(e).__name__}: {e}"))
+
+    code, body, err = fetch(BLOG_FEED)
+    m = re.search(r"<lastBuildDate>([^<]+)</lastBuildDate>", body)
+    if code != 200 or not m:
+        rows.append((False, "Blog: newest issue date", err or "feed has no lastBuildDate"))
+    else:
+        age = (today - email.utils.parsedate_to_datetime(m.group(1))).days
+        rows.append((age <= BLOG_MAX_AGE_DAYS, "Blog: newest issue date",
+                     f"{age} days old" + ("" if age <= BLOG_MAX_AGE_DAYS else f" (more than {BLOG_MAX_AGE_DAYS}: this month's issue was not generated or not approved)")))
     return rows
 
 
@@ -184,6 +259,7 @@ def check_items(path, today):
 # One line of "what to do" shown under a section that has a FAIL, so the summary alone is enough to act on.
 HINTS = {
     "Live sites": "Reload the site yourself. Still down: open the repo's Settings > Pages (is it published?) and its Actions tab (did the last deploy fail?).",
+    "Content and search visibility": "Open the line marked FAIL. noindex, robots or JSON-LD: the last push to that repo broke it; paste the line to Claude with that repo's CLAUDE.md. Dead sitemap URL: the page was renamed or deleted. Blog issue date: open www.imetrobert.com/blog/staging/preview.html and approve, or see docs/DIAGNOSE.md in the blog repo. public_caps: the toolkit's capability table was not published.",
     "Supabase": "Check https://status.supabase.com, then https://supabase.com/dashboard/project/ipnajvgwtjrlecbqfwrh (a paused project has a Restore button). All sign-ins depend on it.",
     "Latest automated runs in every repo": "Open that repo's Actions tab, tap the red run and read the error. Key or token errors include the fix steps; every key is listed in docs/KEYS.md. An old red clears itself after the next green run.",
     "TLS certificates": "In the repo's Settings > Pages turn Enforce HTTPS off and on again; if the domain is not verified, check DNS at Name Services.",
@@ -222,6 +298,7 @@ def main():
     dom_rows, dom_notes = check_domains(today)
     item_rows, item_notes = check_items(os.path.join(os.path.dirname(__file__), "..", "ops", "expiries.json"), today)
     sections = [("Live sites", safe("sites", check_sites)), ("Supabase", safe("supabase", check_supabase)),
+                ("Content and search visibility", safe("content", check_content, today)),
                 ("Latest automated runs in every repo", safe("workflows", check_workflows, today)),
                 ("TLS certificates", safe("tls", check_tls)), ("Domain registration", dom_rows), ("Renewals you track", item_rows)]
     text, failed = render(sections, dom_notes + item_notes)
