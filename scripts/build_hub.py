@@ -23,21 +23,21 @@ BRANDS = [
        accent="#3fa7e0", accent_text="#1f77ae", btn_text="#0b2540",
        en=dict(suffix="for Seniors", tag="One-on-one, patient, no jargon",
                text="Friendly AI and technology lessons for seniors, at home or online.",
-               btn="Visit the Seniors site →", url="https://seniors.aiwithrobert.com/?lang=en",
+               btn="Visit the Seniors site →", url="https://seniors.aiwithrobert.com/?lang=en&utm_source=hub&utm_campaign=brand-card",
                alt="AI with Robert for Seniors logo", hero_alt="Seniors learning to use AI together on laptops", aria="Go to AI with Robert for Seniors"),
        fr=dict(suffix="pour aînés", tag="Individuel, patient, sans jargon",
                text="Cours conviviaux d’IA et de technologie pour aînés, à domicile ou en ligne.",
-               btn="Visiter le site pour aînés →", url="https://seniors.aiwithrobert.com/fr/",
+               btn="Visiter le site pour aînés →", url="https://seniors.aiwithrobert.com/fr/?utm_source=hub&utm_campaign=brand-card",
                alt="Logo AI with Robert pour aînés", hero_alt="Des aînés apprennent ensemble à utiliser l’IA sur des portables", aria="Aller à AI with Robert pour aînés")),
   dict(id="business", logo="/img/logo-business-128.png", hero="/img/hero-business-640",
        accent="#c9a227", accent_text="#8a6d0b", btn_text="#11304c",
        en=dict(suffix="for Business", tag="Get more from the AI you already pay for",
                text="AI consulting, workflow automation and team training for small businesses.",
-               btn="Visit the Business site →", soon_btn="Coming soon", early="Interested early?", early_link="Get in touch", url="https://biz.aiwithrobert.com/?lang=en",
+               btn="Visit the Business site →", soon_btn="Coming soon", early="Interested early?", early_link="Get in touch", url="https://biz.aiwithrobert.com/?lang=en&utm_source=hub&utm_campaign=brand-card",
                alt="AI with Robert for Business logo", hero_alt="A business owner at a laptop with AI workflow icons", aria="Go to AI with Robert for Business"),
        fr=dict(suffix="pour entreprises", tag="Tirez plus de l’IA que vous payez déjà",
                text="Consultation en IA, automatisation des flux de travail et formation d’équipe pour les petites entreprises.",
-               btn="Visiter le site pour entreprises →", soon_btn="Bientôt disponible", early="Intéressé dès maintenant?", early_link="Écrivez-moi", url="https://biz.aiwithrobert.com/fr/",
+               btn="Visiter le site pour entreprises →", soon_btn="Bientôt disponible", early="Intéressé dès maintenant?", early_link="Écrivez-moi", url="https://biz.aiwithrobert.com/fr/?utm_source=hub&utm_campaign=brand-card",
                alt="Logo AI with Robert pour entreprises", hero_alt="Un propriétaire d’entreprise à son portable, avec des icônes de flux de travail IA", aria="Aller à AI with Robert pour entreprises")),
 ]
 
@@ -84,6 +84,18 @@ a.card{text-decoration:none;color:inherit;-webkit-tap-highlight-color:rgba(17,48
 @media(min-width:1300px){body:before{content:"";position:fixed;z-index:-1;left:0;top:0;bottom:0;width:9vw;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath fill='%2356aeaa' d='M56,0 L66,0 C94,32 56,68 86,100 L72,100 C42,68 80,32 56,0Z'/%3E%3Cpath fill='%231f3050' d='M0,0 L56,0 C80,32 42,68 72,100 L0,100Z'/%3E%3C/svg%3E") left top/100% 100% no-repeat}}
 @media(max-width:700px){.hero{padding:2.2rem 22px 4.5rem}.hero img{width:130px}.wm{font-size:2.3rem}.sub{font-size:1.25rem}.grid{grid-template-columns:1fr}}"""
 
+GA = """<!-- Google tag (gtag.js): same GA4 property as the seniors and business sites; reports are split by the site label -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DM4EY880K2"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-DM4EY880K2',{site:'hub'});
+document.addEventListener('click',function(e){try{var a=e.target.closest&&e.target.closest('a');if(!a)return;var h=a.getAttribute('href')||'';
+if(a.getAttribute('data-brand'))gtag('event','brand_card_click',{brand:a.getAttribute('data-brand'),transport_type:'beacon'});
+else if(h.indexOf('mailto:')===0)gtag('event','email_click',{transport_type:'beacon'});
+else if(h.indexOf('tel:')===0)gtag('event','phone_click',{transport_type:'beacon'});}catch(x){}},true);
+</script>
+"""
+
 def card(b, lang):
     t = b[lang]
     style = "--accent:%s;--accent-text:%s;--btn-text:%s" % (b["accent"], b["accent_text"], b["btn_text"])
@@ -92,7 +104,7 @@ def card(b, lang):
         head = '<section class="card soon" style="%s">\n' % style
         close = "</section>"
     else:
-        head = '<a class="card" href="%s" aria-label="%s" style="%s">\n' % (t["url"], t["aria"], style)
+        head = '<a class="card" href="%s" data-brand="%s" aria-label="%s" style="%s">\n' % (t["url"].replace("&", "&amp;"), b["id"], t["aria"], style)
         close = "</a>"
     if soon:
         head += '<span class="badge">%s</span>\n' % t["soon_btn"]
@@ -170,7 +182,7 @@ def page(k):
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<style>{CSS}</style>
+{GA}<style>{CSS}</style>
 {jsonld(k)}</head>
 <body>
 <div class="top"><nav class="lang" aria-label="{t["langlabel"]}">{sw}</nav></div>
