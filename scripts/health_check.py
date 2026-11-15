@@ -49,14 +49,14 @@ TLS_HOSTS = ["aiwithrobert.com", "seniors.aiwithrobert.com", "biz.aiwithrobert.c
 TLS_WARN_DAYS, DOMAIN_WARN_DAYS, ITEM_WARN_DAYS, RUN_MAX_AGE_DAYS = 10, 45, 14, 21
 
 
-def fetch(url, headers=None, tries=3, timeout=20):
+def fetch(url, headers=None, tries=3, timeout=20, limit=400000):
     """Return (status, body_text, error). Retries so one blip does not email anyone."""
     last = ""
     for i in range(tries):
         try:
             req = urllib.request.Request(url, headers=dict({"User-Agent": "awr-health-check"}, **(headers or {})))
             with urllib.request.urlopen(req, timeout=timeout) as r:
-                return r.status, r.read(400000).decode("utf-8", "replace"), ""
+                return r.status, r.read(limit).decode("utf-8", "replace"), ""
         except urllib.error.HTTPError as e:
             last = f"HTTP {e.code}"
             if e.code < 500:
@@ -112,7 +112,7 @@ def check_workflows(today):
     if token:
         h["Authorization"] = "Bearer " + token
     for repo in REPOS:
-        code, body, err = fetch(f"https://api.github.com/repos/{OWNER}/{repo}/actions/runs?per_page=60&status=completed", h)
+        code, body, err = fetch(f"https://api.github.com/repos/{OWNER}/{repo}/actions/runs?per_page=40&status=completed", h, limit=8000000)
         if code != 200:
             rows.append((False, repo, f"could not read Actions ({err or code})"))
             continue
@@ -197,13 +197,20 @@ def render(sections, notes):
     return "\n".join(out), failed
 
 
+def safe(name, fn, *args):
+    try:
+        return fn(*args)
+    except Exception as e:                      # the check itself broke: say so loudly
+        return [(False, name, f"the check crashed: {type(e).__name__}: {e}")]
+
+
 def main():
     today = dt.datetime.now(dt.timezone.utc)
     dom_rows, dom_notes = check_domains(today)
     item_rows, item_notes = check_items(os.path.join(os.path.dirname(__file__), "..", "ops", "expiries.json"), today)
-    sections = [("Live sites", check_sites()), ("Supabase", check_supabase()),
-                ("Latest automated runs in every repo", check_workflows(today)),
-                ("TLS certificates", check_tls()), ("Domain registration", dom_rows), ("Renewals you track", item_rows)]
+    sections = [("Live sites", safe("sites", check_sites)), ("Supabase", safe("supabase", check_supabase)),
+                ("Latest automated runs in every repo", safe("workflows", check_workflows, today)),
+                ("TLS certificates", safe("tls", check_tls)), ("Domain registration", dom_rows), ("Renewals you track", item_rows)]
     text, failed = render(sections, dom_notes + item_notes)
     print(text)
     if os.environ.get("GITHUB_STEP_SUMMARY"):
