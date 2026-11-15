@@ -193,6 +193,10 @@ def check_workflows(today):
             continue
         latest = {}
         for run in json.loads(body).get("workflow_runs", []):
+            # only real runs on the main branch count: a red pull request (e.g. a Dependabot update that fails its
+            # Build check) or a test run on a side branch is not an outage and must not email you
+            if run.get("event", "").startswith("pull_request") or run.get("head_branch") not in ("main", "master"):
+                continue
             latest.setdefault(run["name"], run)          # newest first
         bad = []
         for name, run in latest.items():
