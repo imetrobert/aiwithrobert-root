@@ -30,3 +30,6 @@ Ask Claude: "Read APPS.md and tell me about all my apps." For repos, how to fix 
 
 ## Automatic watchers
 Monday health check, Sunday encrypted backup, monthly dependency updates, the blog's own run log. Details: START-HERE.md.
+
+## QR code for talks and print
+`img/qr-feasibility-talk.png` (navy on white, 1 inch minimum when printed) opens the Business site's free feasibility check; the visit is saved on the lead as `qr/talk` and shown in the toolkit's "Where leads come from". For a different event, regenerate with another `utm_campaign` (python `qrcode` package: URL `https://biz.aiwithrobert.com/?utm_source=qr&utm_medium=print&utm_campaign=<event>#feas-check`).
