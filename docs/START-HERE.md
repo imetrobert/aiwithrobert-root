@@ -30,6 +30,9 @@ All share ONE Supabase project and one login. Who can open what is set at access
   safe. Green: Merge. Red: leave it, or paste the failing log to Claude.
 - Blog: Actions > Blog health report; Pipeline health page on the review page; `docs/DIAGNOSE.md` in the blog repo.
 
+## Keys and secrets
+`docs/KEYS.md` lists every key and secret, what breaks when one dies and the link to replace it.
+
 ## Prompts to paste (replace the capitals)
 **Something is broken**
 > Repo imetrobert/REPO. Read only CLAUDE.md and FILE. This error appeared: ERROR TEXT. Find the cause and give me the smallest
