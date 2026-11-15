@@ -1,0 +1,41 @@
+name: Restore from a Supabase backup
+
+# Run from the Actions tab > Restore from a Supabase backup > Run workflow. Adds back missing rows and overwrites
+# matching ones; it NEVER deletes anything. Steps and what to type: docs/BACKUP-RESTORE.md
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: "Number at the end of the backup run's address (Weekly Supabase backup run)"
+        required: true
+      tables:
+        description: "all, or table names separated by commas, e.g. invoices,site_inquiries"
+        required: true
+        default: "all"
+      confirm:
+        description: "Type RESTORE to confirm"
+        required: true
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+      BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Confirm
+        run: '[ "${{ inputs.confirm }}" = "RESTORE" ] || { echo "::error::Type RESTORE exactly to confirm."; exit 1; }'
+      - uses: actions/checkout@v4
+      - name: Download and decrypt the backup
+        run: |
+          gh run download "${{ inputs.run_id }}" --repo "${{ github.repository }}" -n supabase-backup-encrypted -D dl
+          printf '%s' "$BACKUP_PASSPHRASE" | gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 -d dl/backup-*.tar.gz.gpg > backup.tar.gz
+          mkdir restore && tar xzf backup.tar.gz -C restore && cat restore/manifest.json
+      - name: Put the rows back
+        run: python3 scripts/restore_supabase.py restore "${{ inputs.tables }}"
