@@ -1,0 +1,215 @@
+#!/usr/bin/env python3
+"""Weekly health check of every AI with Robert / imetrobert app. Run by .github/workflows/health.yml.
+
+Prints a Markdown report (also written to the job summary) and exits 1 if anything needs action, so
+GitHub emails the owner. Standard library only. Sections: live sites, Supabase, latest result of every
+repo's workflows, TLS certificates, domain registration, and ops/expiries.json.
+Run locally: python3 scripts/health_check.py   (needs network)
+"""
+import datetime as dt
+import json
+import os
+import socket
+import ssl
+import sys
+import urllib.error
+import urllib.request
+
+OWNER = "imetrobert"
+SUPABASE = "https://ipnajvgwtjrlecbqfwrh.supabase.co"
+ANON = "sb_publishable_oPa7fZdSTeXKuCwpOF338Q_PcXS57go"   # publishable key, already public in every app
+
+# (label, [candidate urls; ONE must work], text that must appear or None)
+SITES = [
+    ("Hub aiwithrobert.com", ["https://aiwithrobert.com/"], "AI with Robert"),
+    ("Hub (French)", ["https://aiwithrobert.com/fr/"], "AI with Robert"),
+    ("Seniors site", ["https://seniors.aiwithrobert.com/"], "AI with Robert"),
+    ("Seniors site (French)", ["https://seniors.aiwithrobert.com/fr/"], "AI with Robert"),
+    ("Business site", ["https://biz.aiwithrobert.com/"], "AI with Robert"),
+    ("Business feasibility check script", ["https://biz.aiwithrobert.com/js/feascheck.js"], None),
+    ("Blog home", ["https://www.imetrobert.com/"], "Robert"),
+    ("Blog index", ["https://www.imetrobert.com/blog/"], None),
+    ("Blog latest post", ["https://www.imetrobert.com/blog/posts/latest.html"], None),
+    ("Blog feed", ["https://www.imetrobert.com/feed.xml"], None),
+    ("Toolkit", ["https://toolkit.aiwithrobert.com/"], None),
+    ("Invoicing app", ["https://invoices.imetrobert.com/", "https://invoices.aiwithrobert.com/"], None),
+    ("ETF tracker", ["https://etf.imetrobert.com/"], None),
+    ("Marketplace generator", ["https://fbmarket.imetrobert.com/"], None),
+    ("Claims tracker", ["https://tax.imetrobert.com/"], None),
+    ("Job search", ["https://jobs.imetrobert.com/"], None),
+    ("Access rights page", ["https://access.imetrobert.com/"], None),
+]
+REPOS = ["aiwithrobert", "aiwithrobert-biz", "aiwithrobert-root", "aiwithrobert-toolkit",
+         "Ai-with-Robert-Invoicing-System", "Facebook-marketplace-generator", "tsx-etf-signal-notifier",
+         "imetrobert.github.io", "claims-tracker", "jobs", "Supabase-platform-"]
+DOMAINS = {"aiwithrobert.com": "com", "imetrobert.com": "com"}
+TLS_HOSTS = ["aiwithrobert.com", "seniors.aiwithrobert.com", "biz.aiwithrobert.com", "www.imetrobert.com",
+             "toolkit.aiwithrobert.com", "etf.imetrobert.com", "fbmarket.imetrobert.com", "tax.imetrobert.com",
+             "jobs.imetrobert.com", "access.imetrobert.com"]
+TLS_WARN_DAYS, DOMAIN_WARN_DAYS, ITEM_WARN_DAYS, RUN_MAX_AGE_DAYS = 10, 45, 14, 21
+
+
+def fetch(url, headers=None, tries=3, timeout=20):
+    """Return (status, body_text, error). Retries so one blip does not email anyone."""
+    last = ""
+    for i in range(tries):
+        try:
+            req = urllib.request.Request(url, headers=dict({"User-Agent": "awr-health-check"}, **(headers or {})))
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                return r.status, r.read(400000).decode("utf-8", "replace"), ""
+        except urllib.error.HTTPError as e:
+            last = f"HTTP {e.code}"
+            if e.code < 500:
+                return e.code, "", last
+        except Exception as e:  # network, DNS, TLS, timeout
+            last = f"{type(e).__name__}: {e}"
+        if i < tries - 1:
+            import time
+            time.sleep(4 * (i + 1))
+    return 0, "", last
+
+
+def check_sites():
+    rows = []
+    for label, urls, needle in SITES:
+        problems = []
+        for u in urls:
+            code, body, err = fetch(u)
+            if code == 200 and (needle is None or needle.lower() in body.lower()):
+                rows.append((True, label, u))
+                break
+            problems.append(f"{u}: {err or ('HTTP %d' % code) if code != 200 else 'missing text ' + repr(needle)}")
+        else:
+            rows.append((False, label, "; ".join(problems)))
+    return rows
+
+
+def check_supabase():
+    rows = []
+    h = {"apikey": ANON}
+    code, body, err = fetch(SUPABASE + "/auth/v1/health", h)
+    rows.append((code == 200, "Supabase sign-in service", err or f"HTTP {code}"))
+    for app in ("seniors", "business"):
+        req = urllib.request.Request(SUPABASE + "/rest/v1/rpc/site_capacity", method="POST",
+                                     data=json.dumps({"p_site": app}).encode(),
+                                     headers={"apikey": ANON, "Content-Type": "application/json", "User-Agent": "awr-health-check"})
+        try:
+            with urllib.request.urlopen(req, timeout=20) as r:
+                rows.append((r.status == 200, f"Supabase site_capacity({app})", f"HTTP {r.status}"))
+        except urllib.error.HTTPError as e:
+            # a 4xx on a wrong argument name still proves the database answers; only 5xx/network means down
+            rows.append((e.code < 500, f"Supabase site_capacity({app})", f"HTTP {e.code}"))
+        except Exception as e:
+            rows.append((False, f"Supabase site_capacity({app})", f"{type(e).__name__}: {e}"))
+    return rows
+
+
+def check_workflows(today):
+    """Latest completed run of every workflow in every repo; flag a failure still unresolved."""
+    rows = []
+    token = os.environ.get("GITHUB_TOKEN", "")
+    h = {"Accept": "application/vnd.github+json"}
+    if token:
+        h["Authorization"] = "Bearer " + token
+    for repo in REPOS:
+        code, body, err = fetch(f"https://api.github.com/repos/{OWNER}/{repo}/actions/runs?per_page=60&status=completed", h)
+        if code != 200:
+            rows.append((False, repo, f"could not read Actions ({err or code})"))
+            continue
+        latest = {}
+        for run in json.loads(body).get("workflow_runs", []):
+            latest.setdefault(run["name"], run)          # newest first
+        bad = []
+        for name, run in latest.items():
+            if run["conclusion"] != "failure":
+                continue
+            age = (today - dt.datetime.fromisoformat(run["created_at"].replace("Z", "+00:00"))).days
+            if age <= RUN_MAX_AGE_DAYS:
+                bad.append(f"{name} (failed {age}d ago: {run['html_url']})")
+        rows.append((not bad, repo, "; ".join(bad) if bad else f"{len(latest)} workflows, none failing"))
+    return rows
+
+
+def tls_days_left(host):
+    ctx = ssl.create_default_context()
+    with socket.create_connection((host, 443), timeout=15) as s:
+        with ctx.wrap_socket(s, server_hostname=host) as t:
+            exp = ssl.cert_time_to_seconds(t.getpeercert()["notAfter"])
+    return int((exp - dt.datetime.now(dt.timezone.utc).timestamp()) // 86400)
+
+
+def check_tls():
+    rows = []
+    for host in TLS_HOSTS:
+        try:
+            d = tls_days_left(host)
+            rows.append((d >= TLS_WARN_DAYS, host, f"certificate valid for {d} more days"))
+        except Exception as e:
+            rows.append((False, host, f"{type(e).__name__}: {e}"))
+    return rows
+
+
+def check_domains(today):
+    rows, notes = [], []
+    for dom, tld in DOMAINS.items():
+        code, body, err = fetch(f"https://rdap.verisign.com/{tld}/v1/domain/{dom}", tries=2)
+        exp = None
+        if code == 200:
+            for ev in json.loads(body).get("events", []):
+                if ev.get("eventAction") == "expiration":
+                    exp = dt.datetime.fromisoformat(ev["eventDate"].replace("Z", "+00:00"))
+        if exp is None:
+            notes.append(f"{dom}: registration date could not be read ({err or code}); check it by hand")
+            continue
+        d = (exp - today).days
+        rows.append((d >= DOMAIN_WARN_DAYS, dom, f"registration expires {exp.date()} ({d} days)"))
+    return rows, notes
+
+
+def check_items(path, today):
+    rows, notes = [], []
+    try:
+        items = json.load(open(path, encoding="utf-8"))["items"]
+    except Exception as e:
+        return [(False, "ops/expiries.json", f"unreadable: {e}")], notes
+    for it in items:
+        if not it.get("date"):
+            notes.append(f"{it['name']}: no date set (edit ops/expiries.json)")
+            continue
+        d = (dt.datetime.fromisoformat(it["date"]).replace(tzinfo=dt.timezone.utc) - today).days
+        rows.append((d > ITEM_WARN_DAYS, it["name"], f"expires {it['date']} ({d} days). Renew: {it.get('renew', '')}"))
+    return rows, notes
+
+
+def render(sections, notes):
+    out, failed = ["# Weekly health check", f"_{dt.datetime.now(dt.timezone.utc):%Y-%m-%d %H:%M} UTC_", ""], 0
+    for title, rows in sections:
+        bad = [r for r in rows if not r[0]]
+        failed += len(bad)
+        out.append(f"## {title}: {'ALL OK' if not bad else str(len(bad)) + ' NEED ACTION'}")
+        for ok, label, detail in rows:
+            out.append(f"- {'OK' if ok else '**FAIL**'} {label}: {detail}")
+        out.append("")
+    if notes:
+        out.append("## Notes (do not fail the check)")
+        out += [f"- {n}" for n in notes] + [""]
+    out.append("Next step if anything failed: open docs/START-HERE.md in this repo and use the matching prompt.")
+    return "\n".join(out), failed
+
+
+def main():
+    today = dt.datetime.now(dt.timezone.utc)
+    dom_rows, dom_notes = check_domains(today)
+    item_rows, item_notes = check_items(os.path.join(os.path.dirname(__file__), "..", "ops", "expiries.json"), today)
+    sections = [("Live sites", check_sites()), ("Supabase", check_supabase()),
+                ("Latest automated runs in every repo", check_workflows(today)),
+                ("TLS certificates", check_tls()), ("Domain registration", dom_rows), ("Renewals you track", item_rows)]
+    text, failed = render(sections, dom_notes + item_notes)
+    print(text)
+    if os.environ.get("GITHUB_STEP_SUMMARY"):
+        open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8").write(text + "\n")
+    sys.exit(1 if failed else 0)
+
+
+if __name__ == "__main__":
+    main()

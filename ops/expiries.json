@@ -1,0 +1,9 @@
+{
+  "_help": "Dates are YYYY-MM-DD. The weekly check fails (and emails you) when a date is within 14 days or past. Set 'date' to null if unknown: it is listed as 'no date set' but does not fail. Edit this file on GitHub when you renew something.",
+  "items": [
+    {"name": "GitHub token saved on the blog review page (blog_preview_pat)", "date": null, "renew": "github.com > Settings > Developer settings > fine-grained token; paste the new one into the review page"},
+    {"name": "Gemini API key (blog)", "date": null, "renew": "aistudio.google.com > API keys; update the GEMINI_API_KEY secret in imetrobert.github.io"},
+    {"name": "Supabase secret key in the vault (invites)", "date": null, "renew": "see migration/invite_user.sql setup note in Supabase-platform-"},
+    {"name": "EmailJS plan quota cycle", "date": null, "renew": "resets on the 10th each month; check the invoicing dashboard card"}
+  ]
+}
