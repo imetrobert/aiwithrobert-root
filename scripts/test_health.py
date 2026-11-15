@@ -38,4 +38,17 @@ assert [r for r in rows if "newest issue" in r[1]][0][0] is False       # 48 day
 _f = h.fetch
 h.fetch = lambda url, *a, **k: (200, '<meta name="robots" content="noindex">', "") if url.endswith("/") and "x.test" not in url else _f(url, *a, **k)
 assert "noindex" in " ".join(r[2] for r in h.check_content(dt.datetime(2026, 11, 14, tzinfo=dt.timezone.utc)))
+
+# red pull-request and side-branch runs are ignored; a red run on main still counts
+def runs(code=200):
+    old = (now - dt.timedelta(days=0)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    r = lambda n, ev, br, c: {"name": n, "event": ev, "head_branch": br, "conclusion": c, "created_at": old, "html_url": "u"}
+    body = json.dumps({"workflow_runs": [r("Build check", "pull_request", "dependabot/x", "failure"),
+                                         r("Weekly health check", "workflow_dispatch", "side", "failure"),
+                                         r("Deploy", "push", "main", "failure"), r("Deploy", "push", "main", "success")]})
+    return code, body, ""
+h.fetch = lambda url, *a, **k: runs()
+h.REPOS[:] = ["one"]
+rows = h.check_workflows(now)
+assert len(rows) == 1 and rows[0][0] is False and "Deploy" in rows[0][2] and "Build check" not in rows[0][2] and "Weekly" not in rows[0][2], rows
 print("OK")
