@@ -195,6 +195,8 @@ def check_workflows(today):
         for run in json.loads(body).get("workflow_runs", []):
             # only real runs on the main branch count: a red pull request (e.g. a Dependabot update that fails its
             # Build check) or a test run on a side branch is not an outage and must not email you
+            if run["name"] == "Weekly health check":     # its own earlier red would keep it red forever; a failed run already emails you
+                continue
             if run.get("event", "").startswith("pull_request") or run.get("head_branch") not in ("main", "master"):
                 continue
             latest.setdefault(run["name"], run)          # newest first
