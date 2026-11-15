@@ -28,6 +28,8 @@ Most keys never expire. They stop working only if you delete, rotate or reset th
 |---|---|---|---|
 | EMAILJS_PUBLIC_KEY, EMAILJS_PRIVATE_KEY, EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, NOTIFY_EMAIL | ETF alert emails | no alerts (prices still refresh) | https://dashboard.emailjs.com/admin (Account > API keys; IDs are on the Email Services and Email Templates pages). NOTIFY_EMAIL is just the address alerts go to |
 | VITE_EMAILJS_PUBLIC_KEY, _SERVICE_ID, _TEMPLATE_ID | invoicing app emails | invoices cannot be emailed | same dashboard; secrets in the invoicing repo; redeploy by merging any change or running Deploy |
+| Brevo SMTP login and key | the email service behind EmailJS: ETF alerts, invoice emails, blog review notices; keeps the sender checks (DKIM, DMARC) passing | emails stop or land in spam | make a new SMTP key in your Brevo account (SMTP & API), then paste it into the email service at https://dashboard.emailjs.com/admin (Email Services > your Brevo service). It is stored there, not in any GitHub secret |
+
 EmailJS free plan: 200 emails per cycle, resets on the 10th (the invoicing dashboard shows usage).
 
 ## Job search feeds (jobs repo, all optional sources)
