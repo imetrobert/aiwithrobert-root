@@ -10,7 +10,7 @@ GitHub > imetrobert/aiwithrobert-root > Settings > Secrets and variables > Actio
 - `SUPABASE_SERVICE_KEY`: Supabase dashboard > Project Settings > API Keys > the **secret** key (not the publishable one).
 - `BACKUP_PASSPHRASE`: a long passphrase you invent. **Save it in your password manager: without it a backup cannot be opened.**
 Then Actions > Weekly Supabase backup > Run workflow, and check it goes green. Do this once now, then look at it monthly.
-  **Where the passphrase is kept:** in Bitwarden, in the Notes of the invoices.imetrobert.com entry (hint only; the passphrase itself is never in this repo).
+  **Where the passphrase is kept:** in the notes section of the password manager entry for invoices.imetrobert.com (hint only; the passphrase itself is never in this repo).
 
 ## 2. Check it worked
 Actions > Weekly Supabase backup > latest run > the file under "Artifacts" (supabase-backup-encrypted). A red run emails you.
