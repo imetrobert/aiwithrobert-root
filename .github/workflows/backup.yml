@@ -1,0 +1,44 @@
+name: Weekly Supabase backup
+
+# Sundays, and on demand. Dumps every table, ENCRYPTS it, and keeps it as a download on the run page for 90 days.
+# Needs two repository secrets (Settings > Secrets and variables > Actions): SUPABASE_SERVICE_KEY, BACKUP_PASSPHRASE.
+# A red run emails you. Restore steps: docs/BACKUP-RESTORE.md
+on:
+  schedule:
+    - cron: "11 8 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+      BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check the two secrets exist
+        run: |
+          missing=""
+          [ -n "$SUPABASE_SERVICE_KEY" ] || missing="$missing SUPABASE_SERVICE_KEY"
+          [ -n "$BACKUP_PASSPHRASE" ] || missing="$missing BACKUP_PASSPHRASE"
+          if [ -n "$missing" ]; then echo "::error::Add these repository secrets, then run again:$missing (see docs/BACKUP-RESTORE.md, step 1)"; exit 1; fi
+      - name: Dump every table
+        run: python3 scripts/backup_supabase.py dump
+      - name: Encrypt (the plain files never leave this machine)
+        run: |
+          tar czf backup.tar.gz -C dump .
+          printf '%s' "$BACKUP_PASSPHRASE" | gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 \
+            --symmetric --cipher-algo AES256 -o "backup-$(date -u +%Y-%m-%d).tar.gz.gpg" backup.tar.gz
+          rm -rf dump backup.tar.gz
+          ls -l backup-*.gpg
+      - name: Keep it for 90 days
+        uses: actions/upload-artifact@v4
+        with:
+          name: supabase-backup-encrypted
+          path: backup-*.tar.gz.gpg
+          retention-days: 90
+          if-no-files-found: error
