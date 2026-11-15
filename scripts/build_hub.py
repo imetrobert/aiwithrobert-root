@@ -94,6 +94,7 @@ if(a.getAttribute('data-brand'))gtag('event','brand_card_click',{brand:a.getAttr
 else if(h.indexOf('mailto:')===0)gtag('event','email_click',{transport_type:'beacon'});
 else if(h.indexOf('tel:')===0)gtag('event','phone_click',{transport_type:'beacon'});}catch(x){}},true);
 </script>
+<script defer src="/js/hits.js"></script>
 """
 
 def card(b, lang):
