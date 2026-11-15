@@ -22,6 +22,16 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<!-- Google tag (gtag.js): same GA4 property as the seniors and business sites; reports are split by the site label -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DM4EY880K2"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-DM4EY880K2',{site:'hub'});
+document.addEventListener('click',function(e){try{var a=e.target.closest&&e.target.closest('a');if(!a)return;var h=a.getAttribute('href')||'';
+if(a.getAttribute('data-brand'))gtag('event','brand_card_click',{brand:a.getAttribute('data-brand'),transport_type:'beacon'});
+else if(h.indexOf('mailto:')===0)gtag('event','email_click',{transport_type:'beacon'});
+else if(h.indexOf('tel:')===0)gtag('event','phone_click',{transport_type:'beacon'});}catch(x){}},true);
+</script>
 <style>*{box-sizing:border-box;margin:0}html{-webkit-text-size-adjust:100%}
 body{position:relative;overflow-x:hidden;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#11304c;background:#fff;line-height:1.4}
 body:after{content:"";position:absolute;z-index:-1;left:0;right:0;top:0;height:560px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 560' preserveAspectRatio='xMinYMin slice'%3E%3Cdefs%3E%3ClinearGradient id='w' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%2356aeaa' stop-opacity='.15'/%3E%3Cstop offset='1' stop-color='%2356aeaa' stop-opacity='0'/%3E%3C/linearGradient%3E%3ClinearGradient id='t' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%2356aeaa' stop-opacity='.30'/%3E%3Cstop offset='.8' stop-color='%2356aeaa' stop-opacity='.05'/%3E%3Cstop offset='1' stop-color='%2356aeaa' stop-opacity='0'/%3E%3C/linearGradient%3E%3ClinearGradient id='n' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%231f3050' stop-opacity='.10'/%3E%3Cstop offset='.8' stop-color='%231f3050' stop-opacity='.03'/%3E%3Cstop offset='1' stop-color='%231f3050' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1440' height='560' fill='url%28%23w%29'/%3E%3Cpath fill='url%28%23t%29' d='M1010,0 L1440,0 L1440,260 C1330,190 1130,110 1010,0Z'/%3E%3Cpath fill='url%28%23t%29' fill-opacity='.5' d='M1150,0 L1440,0 L1440,400 C1380,270 1270,130 1150,0Z'/%3E%3Cpath fill='url%28%23n%29' d='M0,0 L300,0 C380,140 250,330 330,560 L0,560Z'/%3E%3Cpath fill='url%28%23t%29' d='M300,0 L316,0 C396,140 266,330 346,560 L330,560 C250,330 380,140 300,0Z'/%3E%3C/svg%3E") left top/cover no-repeat;pointer-events:none}.top{display:flex;justify-content:flex-end;padding:14px 22px}
@@ -135,7 +145,7 @@ a.card{text-decoration:none;color:inherit;-webkit-tap-highlight-color:rgba(17,48
 <main class="areas">
 <h1>Choose the area you need help with</h1>
 <div class="grid">
-<a class="card" href="https://seniors.aiwithrobert.com/?lang=en" aria-label="Go to AI with Robert for Seniors" style="--accent:#3fa7e0;--accent-text:#1f77ae;--btn-text:#0b2540">
+<a class="card" href="https://seniors.aiwithrobert.com/?lang=en&amp;utm_source=hub&amp;utm_campaign=brand-card" data-brand="seniors" aria-label="Go to AI with Robert for Seniors" style="--accent:#3fa7e0;--accent-text:#1f77ae;--btn-text:#0b2540">
 <picture class="hero-img"><source srcset="/img/hero-seniors-640.webp" type="image/webp"><img src="/img/hero-seniors-640.jpg" width="640" height="360" alt="Seniors learning to use AI together on laptops"></picture>
 <img src="/img/logo-seniors-128.png" width="64" height="64" alt="AI with Robert for Seniors logo">
 <h2>AI with Robert <span>for Seniors</span></h2>
@@ -143,7 +153,7 @@ a.card{text-decoration:none;color:inherit;-webkit-tap-highlight-color:rgba(17,48
 <p>Friendly AI and technology lessons for seniors, at home or online.</p>
 <span class="btn">Visit the Seniors site →</span>
 </a>
-<a class="card" href="https://biz.aiwithrobert.com/?lang=en" aria-label="Go to AI with Robert for Business" style="--accent:#c9a227;--accent-text:#8a6d0b;--btn-text:#11304c">
+<a class="card" href="https://biz.aiwithrobert.com/?lang=en&amp;utm_source=hub&amp;utm_campaign=brand-card" data-brand="business" aria-label="Go to AI with Robert for Business" style="--accent:#c9a227;--accent-text:#8a6d0b;--btn-text:#11304c">
 <picture class="hero-img"><source srcset="/img/hero-business-640.webp" type="image/webp"><img src="/img/hero-business-640.jpg" width="640" height="360" alt="A business owner at a laptop with AI workflow icons"></picture>
 <img src="/img/logo-business-128.png" width="64" height="64" alt="AI with Robert for Business logo">
 <h2>AI with Robert <span>for Business</span></h2>
