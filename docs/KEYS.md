@@ -13,7 +13,7 @@ Most keys never expire. They stop working only if you delete, rotate or reset th
 | Secret key auth_secret_key | invite function (access page) | Supabase vault | invitations fail; the error message gives the fix | same page, then the vault command shown in the error |
 | SUPABASE_URL / VITE_SUPABASE_URL | scheduled jobs and builds | repo secrets | everything fails to connect | it is `https://ipnajvgwtjrlecbqfwrh.supabase.co`; do not change |
 | SUPABASE_DB_URL (database connection string) | ETF schema auto-apply | repo secret of tsx-etf-signal-notifier | schema changes stop applying | https://supabase.com/dashboard/project/ipnajvgwtjrlecbqfwrh/settings/database (copy the connection string; it holds the database password) |
-| SUPABASE_ACCESS_TOKEN (personal token) | deploying the Marketplace edge function | repo secret of Facebook-marketplace-generator | "Deploy Supabase function" workflow fails | https://supabase.com/dashboard/account/tokens |
+| SUPABASE_ACCESS_TOKEN (personal token) | deploying the Marketplace and Claims tracker edge functions | repo secret of Facebook-marketplace-generator and of claims-tracker | "Deploy Supabase function" workflow fails | https://supabase.com/dashboard/account/tokens |
 
 ## Gemini and other AI keys
 | Secret | Used by | What breaks | Replace at |
@@ -21,6 +21,7 @@ Most keys never expire. They stop working only if you delete, rotate or reset th
 | GEMINI_API_KEY (blog) | monthly blog, redrafts, Model Scout | no issue gets generated; the run log says why | https://aistudio.google.com/apikey, then update the secret in imetrobert.github.io |
 | GEMINI_API_KEY (jobs) | weekly job scoring; cover letter and CV button | scan scores nothing, or the cover letter button fails | same page; update the secret in jobs, and also the copy in Supabase (https://supabase.com/dashboard/project/ipnajvgwtjrlecbqfwrh/functions > generate-application > Secrets) |
 | GEMINI_API_KEY (Marketplace) | listing generator | listings fail | same page; update the GitHub secret, then run the "Deploy Supabase function" workflow with the box "Also update GEMINI_API_KEY from the repository secret" ticked (it copies the key into Supabase for you) |
+| CLAIMS_GEMINI_API_KEY (Claims tracker) | reads receipts and claim forms for tax.imetrobert.com | receipt scanning fails | https://aistudio.google.com/apikey, then set it as a Supabase function secret: https://supabase.com/dashboard/project/ipnajvgwtjrlecbqfwrh/functions > claims-extract > Secrets (it is not in GitHub) |
 | ANTHROPIC_API_KEY (jobs, optional) | used for scoring and cover letters only if it is set; otherwise Gemini is used | nothing, if unset | https://console.anthropic.com/settings/keys |
 
 ## Email
