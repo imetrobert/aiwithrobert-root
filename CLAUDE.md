@@ -39,6 +39,11 @@ Redirect pages stay noindex and unlisted in the sitemap. The hub's JSON-LD (Orga
 Supabase backup and restore: `scripts/backup_supabase.py`, `scripts/restore_supabase.py`, `docs/BACKUP-RESTORE.md`.
 Offline tests: `python3 scripts/test_health.py`, `python3 scripts/test_backup.py`.
 
+## Marketing assets
+
+`img/qr-feasibility-talk.png` is the QR code for talks and print; it opens the Business site's free feasibility check tagged `qr/talk` (how to make another: `docs/APPS.md`, "QR code for talks").
+Traffic tags and what reads them: see the Business repo's CLAUDE.md ("Traffic from the blog and QR"). The blog's LinkedIn promo kit lives in `imetrobert/imetrobert.github.io` (`docs/blog-pipeline.md`).
+
 ## Sibling repos
 
 - `imetrobert/aiwithrobert` → seniors.aiwithrobert.com
