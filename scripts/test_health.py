@@ -45,7 +45,8 @@ def runs(code=200):
     r = lambda n, ev, br, c: {"name": n, "event": ev, "head_branch": br, "conclusion": c, "created_at": old, "html_url": "u"}
     body = json.dumps({"workflow_runs": [r("Build check", "pull_request", "dependabot/x", "failure"),
                                          r("Weekly health check", "workflow_dispatch", "side", "failure"),
-                                         r("Deploy", "push", "main", "failure"), r("Deploy", "push", "main", "success")]})
+                                         r("Deploy", "push", "main", "failure"), r("Deploy", "push", "main", "success"),
+                                         r("Weekly health check", "schedule", "main", "failure")]})
     return code, body, ""
 h.fetch = lambda url, *a, **k: runs()
 h.REPOS[:] = ["one"]
