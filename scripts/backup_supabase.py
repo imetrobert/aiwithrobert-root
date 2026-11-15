@@ -15,7 +15,9 @@ import sys
 import urllib.request
 
 URL = os.environ.get("SUPABASE_URL", "https://ipnajvgwtjrlecbqfwrh.supabase.co").rstrip("/")
-EXCLUDE = {"etf_prices"}          # large and refreshed daily from Yahoo Finance
+# etf_prices: large, refreshed daily. The three views are computed from tables that ARE backed up
+# (a view cannot be restored into).
+EXCLUDE = {"etf_prices", "invoice_public_v", "invoices_et", "job_ranked"}
 PAGE = 1000
 
 

@@ -1,7 +1,7 @@
 """Offline test: a fake Supabase on localhost; back up, then restore. Run: python3 scripts/test_backup.py"""
 import http.server, json, os, subprocess, sys, tempfile, threading
 
-DATA = {"invoices": [{"id": i, "n": "x"} for i in range(2350)], "leads": [{"id": 1}], "etf_prices": [{"id": 1}]}
+DATA = {"invoices": [{"id": i, "n": "x"} for i in range(2350)], "leads": [{"id": 1}], "etf_prices": [{"id": 1}], "job_ranked": [{"id": 1}]}
 POSTED = {}
 
 class H(http.server.BaseHTTPRequestHandler):
@@ -21,7 +21,7 @@ srv = http.server.HTTPServer(("127.0.0.1", 0), H); threading.Thread(target=srv.s
 env = dict(os.environ, SUPABASE_URL=f"http://127.0.0.1:{srv.server_port}", SUPABASE_SERVICE_KEY="k")
 d = tempfile.mkdtemp(); here = os.path.dirname(os.path.abspath(__file__))
 subprocess.run([sys.executable, os.path.join(here, "backup_supabase.py"), d], env=env, check=True, capture_output=True)
-files = sorted(os.listdir(d)); assert files == ["invoices.json", "leads.json", "manifest.json"], files   # etf_prices skipped
+files = sorted(os.listdir(d)); assert files == ["invoices.json", "leads.json", "manifest.json"], files   # etf_prices and views skipped
 m = json.load(open(os.path.join(d, "manifest.json"))); assert m["rows"] == {"invoices": 2350, "leads": 1} and not m["failed"], m  # paging works
 subprocess.run([sys.executable, os.path.join(here, "restore_supabase.py"), d, "invoices"], env=env, check=True, capture_output=True)
 assert len(POSTED["invoices"]) == 2350 and "leads" not in POSTED

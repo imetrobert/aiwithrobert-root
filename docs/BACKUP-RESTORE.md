@@ -2,7 +2,7 @@
 
 Every Sunday a job saves every table of the shared Supabase project (invoices, leads, feasibility checks, sessions,
 ETF holdings, access rows and so on) as an ENCRYPTED file you can download from the run page for 90 days.
-Prices and other data re-fetched automatically (`etf_prices`) are skipped. Passwords/accounts live in Supabase Auth
+Prices (`etf_prices`) and three computed views are skipped. Passwords/accounts live in Supabase Auth
 and are not in the file: people are re-invited from access.imetrobert.com (their access rows are in the backup).
 
 ## 1. One-time setup (two secrets)
@@ -10,6 +10,7 @@ GitHub > imetrobert/aiwithrobert-root > Settings > Secrets and variables > Actio
 - `SUPABASE_SERVICE_KEY`: Supabase dashboard > Project Settings > API Keys > the **secret** key (not the publishable one).
 - `BACKUP_PASSPHRASE`: a long passphrase you invent. **Save it in your password manager: without it a backup cannot be opened.**
 Then Actions > Weekly Supabase backup > Run workflow, and check it goes green. Do this once now, then look at it monthly.
+  **Where the passphrase is kept:** in Bitwarden, in the Notes of the invoices.imetrobert.com entry (hint only; the passphrase itself is never in this repo).
 
 ## 2. Check it worked
 Actions > Weekly Supabase backup > latest run > the file under "Artifacts" (supabase-backup-encrypted). A red run emails you.
