@@ -85,6 +85,7 @@ a.card{text-decoration:none;color:inherit;-webkit-tap-highlight-color:rgba(17,48
 @media(max-width:700px){.hero{padding:2.2rem 22px 4.5rem}.hero img{width:130px}.wm{font-size:2.3rem}.sub{font-size:1.25rem}.grid{grid-template-columns:1fr}}"""
 
 GA = """<!-- Google tag (gtag.js): same GA4 property as the seniors and business sites; reports are split by the site label -->
+<script>try{var q=location.search;if(/[?&]countme=1/.test(q)||(!/[?&]countme=0/.test(q)&&localStorage.getItem("hits-off")==="1"))window["ga-disable-G-DM4EY880K2"]=true}catch(e){}</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DM4EY880K2"></script>
 <script>
 window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
