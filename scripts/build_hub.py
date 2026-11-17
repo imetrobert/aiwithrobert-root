@@ -91,6 +91,7 @@ GA = """<!-- Google tag (gtag.js): same GA4 property as the seniors and business
 window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
 gtag('js',new Date());gtag('config','G-DM4EY880K2',{site:'hub'});
 document.addEventListener('click',function(e){try{var a=e.target.closest&&e.target.closest('a');if(!a)return;var h=a.getAttribute('href')||'';
+if(a.getAttribute('data-brand')&&window['ga-disable-G-DM4EY880K2']===true&&a.href.indexOf('countme=')<0)a.href+=(a.href.indexOf('?')<0?'?':'&')+'countme=1';
 if(a.getAttribute('data-brand'))gtag('event','brand_card_click',{brand:a.getAttribute('data-brand'),transport_type:'beacon'});
 else if(h.indexOf('mailto:')===0)gtag('event','email_click',{transport_type:'beacon'});
 else if(h.indexOf('tel:')===0)gtag('event','phone_click',{transport_type:'beacon'});}catch(x){}},true);
