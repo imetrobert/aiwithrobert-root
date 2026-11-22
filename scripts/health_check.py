@@ -40,15 +40,21 @@ SITES = [
     ("Marketplace generator", ["https://fbmarket.imetrobert.com/"], None),
     ("Claims tracker", ["https://tax.imetrobert.com/"], None),
     ("Job search", ["https://jobs.imetrobert.com/"], None),
+    ("Quebec planner", ["https://retireqc.aiwithrobert.com/"], None),
+    ("Quebec planner (French address)", ["https://retraiteqc.aiwithrobert.com/"], None),
+    ("Ontario planner", ["https://retireon.aiwithrobert.com/"], None),
+    ("Personal planner", ["https://retire.imetrobert.com/"], None),
     ("Access rights page", ["https://access.imetrobert.com/"], None),
 ]
 REPOS = ["aiwithrobert", "aiwithrobert-biz", "aiwithrobert-root", "aiwithrobert-toolkit",
          "Ai-with-Robert-Invoicing-System", "Facebook-marketplace-generator", "tsx-etf-signal-notifier",
-         "imetrobert.github.io", "claims-tracker", "jobs", "Supabase-platform-"]
+         "imetrobert.github.io", "claims-tracker", "jobs", "Supabase-platform-",
+         "aiwithrobert-retireqc", "aiwithrobert-retireon", "imetrobert-retire"]
 DOMAINS = {"aiwithrobert.com": "com", "imetrobert.com": "com"}
 TLS_HOSTS = ["aiwithrobert.com", "seniors.aiwithrobert.com", "biz.aiwithrobert.com", "www.imetrobert.com",
              "toolkit.aiwithrobert.com", "invest.imetrobert.com", "fbmarket.imetrobert.com", "tax.imetrobert.com",
-             "jobs.imetrobert.com", "access.imetrobert.com"]
+             "jobs.imetrobert.com", "access.imetrobert.com", "retireqc.aiwithrobert.com", "retireon.aiwithrobert.com",
+             "retraiteqc.aiwithrobert.com", "retire.imetrobert.com"]
 # (label, home page, Google Analytics id that must be in the page or None)
 CONTENT_SITES = [
     ("Hub", "https://aiwithrobert.com/", None),

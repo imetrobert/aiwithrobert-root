@@ -1,4 +1,4 @@
-# All my apps at a glance (updated 2026-11-14)
+# All my apps at a glance (updated 2026-11-22)
 
 Ask Claude: "Read APPS.md and tell me about all my apps." For repos, how to fix things and paste-ready prompts, see START-HERE.md.
 "Login" = the shared AI with Robert login (one email and password for everything); access per app is set at access.imetrobert.com.
@@ -21,11 +21,14 @@ Ask Claude: "Read APPS.md and tell me about all my apps." For repos, how to fix 
 | Marketplace generator | fbmarket.imetrobert.com | Turns item photos into a finished Facebook Marketplace listing | access "fb-marketplace" |
 | Claims tracker | tax.imetrobert.com | Tracks Manulife dental/health claims per family member by tax year for the accountant | access "claims-tracker" |
 | Job search | jobs.imetrobert.com | Scans for job postings and tracks your applications | access "job" |
+| Quebec Retirement Planner | retireqc.aiwithrobert.com (French: retraiteqc.aiwithrobert.com, forwards here) | Quebec retirement calculator (RRSP, QPP, OAS, LIRA, tax) in English and French, with encrypted saved plans per login and a user guide | access "retire-qc" |
+| Ontario Retirement Planner | retireon.aiwithrobert.com | Same for Ontario (CPP, Ontario tax), English only | access "retire-on" |
+| Personal Retirement Planner | retire.imetrobert.com | Robert's own planner (Bell-style DC pension, Manulife/Wealthsimple, ETF import); only Robert, never grant to anyone else | access "retire-personal" |
 | Access rights | access.imetrobert.com | Grant or remove each person's access to each app; send invitations | platform admin only |
 | Blog review pages | www.imetrobert.com/blog/staging/ (review, Pipeline health) | Review, redraft, approve or discard the monthly blog issue; see run logs | access "blog-review" |
 
 ## Not web apps
-- Retirement planner: a single HTML file kept by Robert (personal). Fed by the ETF tracker's export.
+- (The retirement planners are now web apps; see the three rows above.)
 - CartMatch (pricecheck.imetrobert.com): retired in November 2026.
 
 ## Automatic watchers

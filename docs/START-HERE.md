@@ -17,6 +17,9 @@ is always: **name the repo, name the one file, paste the error. Never ask it to 
 | Marketplace generator | fbmarket.imetrobert.com | Facebook-marketplace-generator | CLAUDE.md, RUNBOOK.md | push to main (function: manual deploy) |
 | Claims tracker | tax.imetrobert.com | claims-tracker | CLAUDE.md, RUNBOOK.md | push to main |
 | Job search | jobs.imetrobert.com | jobs | CLAUDE.md, RUNBOOK.md | merge to main deploys |
+| Quebec planner (EN + FR) | retireqc.aiwithrobert.com, retraiteqc.aiwithrobert.com | aiwithrobert-retireqc (French address: aiwithrobert-retraiteqc, redirect only) | CLAUDE.md, docs/common-edits.md | push to main; CI checks |
+| Ontario planner | retireon.aiwithrobert.com | aiwithrobert-retireon | CLAUDE.md, docs/common-edits.md | push to main; CI checks |
+| Personal planner (only Robert) | retire.imetrobert.com | imetrobert-retire (public repo, no personal figures in it) | CLAUDE.md, docs/common-edits.md | push to main; CI checks |
 | Access rights | access.imetrobert.com | Supabase-platform- | README.md | push to main |
 
 All share ONE Supabase project and one login. Who can open what is set at access.imetrobert.com.
@@ -52,6 +55,15 @@ All share ONE Supabase project and one login. Who can open what is set at access
 
 **The blog review page or a monthly run failed**
 > Repo imetrobert/imetrobert.github.io. Read docs/DIAGNOSE.md. The run log says: PASTE THE ONE LINE FROM THE HEALTH PAGE.
+
+**Add a small feature or fix to a retirement planner** (Quebec, Ontario or Personal; each is one `index.html` plus a small `account.js`)
+> Repo imetrobert/REPO (aiwithrobert-retireqc, aiwithrobert-retireon or imetrobert-retire). Read only CLAUDE.md and
+> docs/common-edits.md (recipe 9). I want: WHAT I SEE AND WHERE. Use grep or docs/code-map.md, never read index.html whole. Give me
+> the smallest edit as a ready-to-paste snippet with the line to find. Quebec: include the French text. Keep index.html free of
+> network calls. After I commit, the Checks workflow tells me if something broke.
+
+**Planner sign-in, welcome banner or saved plans** (all in `account.js`, recipe 10 in each planner repo): same prompt, but read
+the "Two files, two jobs" section of CLAUDE.md first. The Quebec and Ontario copies of account.js should stay in step.
 
 **Restore data**: follow `docs/BACKUP-RESTORE.md` (no computer needed).
 
