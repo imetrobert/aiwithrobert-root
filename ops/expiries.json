@@ -1,9 +1,50 @@
 {
   "_help": "Dates are YYYY-MM-DD. The weekly check fails (and emails you) when a date is within 14 days or past. Set 'date' to null if unknown: it is listed as 'no date set' but does not fail. Edit this file on GitHub when you renew something.",
   "items": [
-    {"name": "GitHub token saved on the blog review page (blog_preview_pat)", "date": null, "renew": "github.com > Settings > Developer settings > fine-grained token; paste the new one into the review page"},
-    {"name": "Gemini API key (blog)", "date": null, "renew": "aistudio.google.com > API keys; update the GEMINI_API_KEY secret in imetrobert.github.io"},
-    {"name": "Supabase secret key in the vault (invites)", "date": null, "renew": "see migration/invite_user.sql setup note in Supabase-platform-"},
-    {"name": "EmailJS plan quota cycle", "date": null, "renew": "resets on the 10th each month; check the invoicing dashboard card"}
+    {
+      "name": "GitHub token saved on the blog review page (blog_preview_pat)",
+      "date": null,
+      "renew": "github.com > Settings > Developer settings > fine-grained token; paste the new one into the review page"
+    },
+    {
+      "name": "Gemini API key (blog)",
+      "date": null,
+      "renew": "aistudio.google.com > API keys; update the GEMINI_API_KEY secret in imetrobert.github.io"
+    },
+    {
+      "name": "Supabase secret key in the vault (invites)",
+      "date": null,
+      "renew": "see migration/invite_user.sql setup note in Supabase-platform-"
+    },
+    {
+      "name": "EmailJS plan quota cycle",
+      "date": null,
+      "renew": "resets on the 10th each month; check the invoicing dashboard card"
+    },
+    {
+      "name": "Update tax numbers for the new year (three planners): see docs/JANUARY-CHECKLIST.md",
+      "date": "2027-01-15",
+      "renew": "do docs/JANUARY-CHECKLIST.md, then set this date to the next 15 January"
+    },
+    {
+      "name": "Gmail 'Send mail as' for imetrobert.com / AIWithRobert.com must be replaced",
+      "date": "2027-01-01",
+      "renew": "see the email sending setup notes (docs/KEYS.md); then set the date to null or remove this item"
+    },
+    {
+      "name": "ElevenLabs commercial licence check (Business video narration)",
+      "date": null,
+      "renew": "confirm the plan allows commercial use; then remove this item"
+    },
+    {
+      "name": "Bing Webmaster verification and sitemaps for the Business site",
+      "date": null,
+      "renew": "bing.com/webmasters: verify the site and submit the sitemap; then remove this item"
+    },
+    {
+      "name": "YouTube upload date and duration for the Business video (VideoObject uses 2026-11-24 / PT37S)",
+      "date": null,
+      "renew": "fix uploadDate and duration in the Business site JSON-LD if the real values differ; then remove this item"
+    }
   ]
 }

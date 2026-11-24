@@ -33,6 +33,9 @@ All share ONE Supabase project and one login. Who can open what is set at access
   safe. Green: Merge. Red: leave it, or paste the failing log to Claude.
 - Blog: Actions > Blog health report; Pipeline health page on the review page; `docs/DIAGNOSE.md` in the blog repo.
 
+## Once a year
+`docs/JANUARY-CHECKLIST.md`: the new tax numbers for the three retirement planners (and the few other yearly renewals). The health check goes red from 1 January until it is done.
+
 ## Search and AI-answer visibility
 `docs/SEO-AIO-GEO.md`: what is automatic, a 10-minute monthly routine and paste-ready prompts (add a guide, fix a Search Console issue, turn on the rating schema).
 
