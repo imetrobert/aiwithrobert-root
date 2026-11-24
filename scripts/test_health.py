@@ -73,3 +73,14 @@ h.CONTENT_SITES = [("Hub", "https://aiwithrobert.com/", None)]
 r = h.check_outbound_links()
 assert r[0][0] is False and "gone.test" in r[0][2] and "2 checked" in r[0][1], r
 print("OK outbound links")
+
+# AI answer log
+_log = {"runs": [{"date": "2026-10-03", "results": [{"named": True, "cited": False}, {"q": "x", "error": "e"}]},
+                 {"date": "2026-11-03", "results": [{"named": True, "cited": True}, {"named": False, "cited": False}]}]}
+h.fetch = lambda url, *a, **k: (200, json.dumps(_log), "")
+r = h.check_ai_answers(dt.datetime(2026, 11, 20, tzinfo=dt.timezone.utc))
+assert r[0][0] and "named the sites in 1" in r[0][2] and "previous run named 1" in r[0][2], r
+assert h.check_ai_answers(dt.datetime(2027, 1, 20, tzinfo=dt.timezone.utc))[0][0] is False      # stale
+h.fetch = lambda url, *a, **k: (404, "", "HTTP 404")
+assert h.check_ai_answers(dt.datetime(2026, 11, 20, tzinfo=dt.timezone.utc))[0][0] is False
+print("OK ai answers")
