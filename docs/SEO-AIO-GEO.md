@@ -7,6 +7,11 @@
   blocks the site, JSON-LD breaks, the analytics tag disappears, a sitemap URL goes dead, the feasibility table stops answering
   or the blog has no new issue for 40 days.
 
+- Monthly (blog repo, Actions): **AI answer check** (3rd) asks Gemini six client questions and logs whether your sites are named or
+  cited (`ops/ai-answer-log.json`; the health check shows the result and fails only if it stops running; Gemini only).
+  **Content gap suggestion** (4th) proposes ONE guide worth adding (`ops/content-gap.json`: title, question, outline, page to link to).
+  It only suggests; nothing is published.
+
 ## Monthly, from your phone (about 10 minutes)
 1. Search Console (seniors, biz, blog): Pages > any "not indexed" new reason? Performance > top 5 queries. Paste anything odd to Claude.
 2. Google Business Profile (Seniors only): one photo or post, reply to every review.
@@ -20,6 +25,12 @@
 > Repo imetrobert/aiwithrobert. Read only CLAUDE.md and scripts/articles_data.py. Add one guide answering: QUESTION. Match the existing
 > entries (EN and FR, short answer first, 3-5 sections, independence note). Give me the new entry as a snippet to paste at the end of the list.
 > CI builds the page, sitemap, llms.txt and IndexNow.
+
+**Use the monthly guide suggestion (Business)**
+> Repo imetrobert/aiwithrobert-biz. Read only CLAUDE.md and scripts/pages_data.py. Open
+> https://www.imetrobert.com/ops/content-gap.json, take the newest suggestion and write it as one article entry (EN and FR, short answer
+> first, the suggested outline, link to the page named in link_to, no prices, figures or invented clients). Give me the snippet to paste.
+> Then update TARGETS and RELATED_PAGES in imetrobert.github.io as described below.
 
 **Add a page (Business)** same prompt with imetrobert/aiwithrobert-biz and scripts/pages_data.py. Then ALSO update `TARGETS`
 (scripts/promo_kit.py) and `RELATED_PAGES` (scripts/utils.py) in imetrobert.github.io, or blog links will not point to it.
