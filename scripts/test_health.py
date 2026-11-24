@@ -53,3 +53,23 @@ h.REPOS[:] = ["one"]
 rows = h.check_workflows(now)
 assert len(rows) == 1 and rows[0][0] is False and "Deploy" in rows[0][2] and "Build check" not in rows[0][2] and "Weekly" not in rows[0][2], rows
 print("OK")
+
+# page quality: pure function
+good = ('<title>T</title><meta name="description" content="' + "x" * 60 + '"><link rel="canonical" href="https://x.test/"><h1>H</h1>'
+        '<script type="application/ld+json">{"@type":"Article","headline":"a","datePublished":"2026-01-01","dateModified":"2026-01-02"}</script>')
+assert h.page_problems("u", good) == []
+assert "no canonical link" in h.page_problems("u", good.replace("canonical", "x"))
+assert any("lacks dateModified" in p for p in h.page_problems("u", good.replace('"dateModified":"2026-01-02"', '"z":1')))
+assert "not exactly one <h1>" in h.page_problems("u", good + "<h1>2</h1>")
+print("OK page quality")
+
+# outbound links: only definite 404/410 count, own-domain links are not checked
+def fake_links(u, *a, **k):
+    if u == "https://aiwithrobert.com/": return 200, '<a href="https://example.org/x">a</a><a href="https://seniors.aiwithrobert.com/">b</a><a href="https://gone.test/p">c</a>', ""
+    if u.startswith("https://gone.test"): return 404, "", "HTTP 404"
+    return 200, "", ""
+h.fetch = fake_links
+h.CONTENT_SITES = [("Hub", "https://aiwithrobert.com/", None)]
+r = h.check_outbound_links()
+assert r[0][0] is False and "gone.test" in r[0][2] and "2 checked" in r[0][1], r
+print("OK outbound links")

@@ -165,6 +165,83 @@ def check_content(today):
     return rows
 
 
+# ---- Page quality (SEO / AI-answer basics on every sitemap page) and dead outbound links -----------------------------
+QUALITY_SITES = ["https://seniors.aiwithrobert.com", "https://biz.aiwithrobert.com", "https://www.imetrobert.com"]
+LINK_SKIP = ("linkedin.com", "facebook.com", "instagram.com", "x.com", "twitter.com", "google.com", "goo.gl", "youtube.com",
+             "youtu.be", "wa.me", "tel:", "mailto:")   # these block bots, so a failure there says nothing
+
+
+def page_problems(url, body):
+    """Things that quietly cost search and AI-answer visibility. Returns a list of short problem texts."""
+    out = []
+    if not re.search(r"<title>\s*[^<\s][^<]*</title>", body, re.I):
+        out.append("no <title>")
+    if not re.search(r'<meta[^>]+name=["\']description["\'][^>]+content=["\'][^"\']{40,}', body, re.I):
+        out.append("meta description missing or very short")
+    if not re.search(r'<link[^>]+rel=["\']canonical["\']', body, re.I):
+        out.append("no canonical link")
+    if len(re.findall(r"<h1[\s>]", body, re.I)) != 1:
+        out.append("not exactly one <h1>")
+    for block in re.findall(r'<script[^>]+application/ld\+json[^>]*>(.*?)</script>', body, re.S | re.I):
+        try:
+            data = json.loads(block)
+        except Exception:
+            continue                                  # invalid JSON is reported by the content check
+        for node in (data if isinstance(data, list) else [data]):
+            if not isinstance(node, dict):
+                continue
+            t = node.get("@type")
+            t = t[0] if isinstance(t, list) and t else t
+            need = {"Article": ["headline", "datePublished", "dateModified"],
+                    "BlogPosting": ["headline", "datePublished", "dateModified"],
+                    "FAQPage": ["mainEntity"]}.get(t, [])
+            missing = [k for k in need if not node.get(k)]
+            if missing:
+                out.append(f"{t} schema lacks {', '.join(missing)}")
+    return out
+
+
+def check_page_quality():
+    rows = []
+    for site in QUALITY_SITES:
+        code, body, err = fetch(site + "/sitemap.xml", tries=2)
+        urls = re.findall(r"<loc>\s*([^<\s]+)\s*</loc>", body) if code == 200 else []
+        if not urls:
+            rows.append((False, f"Page quality {host_of(site)}", err or "no sitemap URLs"))
+            continue
+        urls = [u for u in urls if "/staging/" not in u]
+        posts = sorted(u for u in urls if "/blog/posts/" in u and not u.endswith("latest.html"))
+        urls = [u for u in urls if u not in posts or u in posts[-3:]][:60]   # old issues are frozen, only the newest 3 count
+        with concurrent.futures.ThreadPoolExecutor(max_workers=8) as ex:
+            pages = list(ex.map(lambda u: (u, fetch(u, tries=2)), urls))
+        bad = []
+        for u, (c, b, e) in pages:
+            if c == 200 and "http-equiv=\"refresh\"" not in b.lower():   # redirect stubs are noindex on purpose
+                pr = page_problems(u, b)
+                if pr:
+                    bad.append(f"{u.replace(site, '') or '/'}: {', '.join(pr)}")
+        rows.append((not bad, f"Page quality {host_of(site)}: {len(urls)} pages",
+                     "; ".join(bad[:4]) + (f" and {len(bad) - 4} more" if len(bad) > 4 else "") if bad else "ok"))
+    return rows
+
+
+def check_outbound_links():
+    """Links from home pages to other sites that are definitely dead (404/410 or the name no longer exists)."""
+    rows = []
+    for _, url, _ in CONTENT_SITES:
+        code, body, err = fetch(url)
+        if code != 200:
+            continue
+        host = host_of(url)
+        links = sorted({m for m in re.findall(r'href=["\'](https?://[^"\'#\s]+)', body)
+                        if host_of(m) != host and not host_of(m).endswith(".".join(host.split(".")[-2:])) and not any(k in m for k in LINK_SKIP)})[:25]
+        with concurrent.futures.ThreadPoolExecutor(max_workers=8) as ex:
+            res = list(ex.map(lambda l: (l, fetch(l, tries=2, limit=2000)), links))
+        dead = [f"{l} ({c or e})" for l, (c, _, e) in res if c in (404, 410) or (c == 0 and "gaierror" in e)]
+        rows.append((not dead, f"Outbound links {host}: {len(links)} checked", "; ".join(dead[:4]) if dead else "ok"))
+    return rows
+
+
 def check_supabase():
     rows = []
     h = {"apikey": ANON}
@@ -311,6 +388,7 @@ def main():
     item_rows, item_notes = check_items(os.path.join(os.path.dirname(__file__), "..", "ops", "expiries.json"), today)
     sections = [("Live sites", safe("sites", check_sites)), ("Supabase", safe("supabase", check_supabase)),
                 ("Content and search visibility", safe("content", check_content, today)),
+                ("Page quality and links", safe("quality", check_page_quality) + safe("links", check_outbound_links)),
                 ("Latest automated runs in every repo", safe("workflows", check_workflows, today)),
                 ("TLS certificates", safe("tls", check_tls)), ("Domain registration", dom_rows), ("Renewals you track", item_rows)]
     text, failed = render(sections, dom_notes + item_notes)
