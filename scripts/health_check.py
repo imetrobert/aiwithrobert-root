@@ -242,6 +242,32 @@ def check_outbound_links():
     return rows
 
 
+AI_LOG = "https://www.imetrobert.com/ops/ai-answer-log.json"
+AI_LOG_MAX_AGE_DAYS = 45
+
+
+def check_ai_answers(today):
+    """Monthly AI-answer check (blog repo, ai-answer-check.yml). Fails only if it stopped running; the numbers are shown."""
+    code, body, err = fetch(AI_LOG, tries=2)
+    if code != 200:
+        return [(False, "AI answer check log", err or f"HTTP {code}: run Actions > AI answer check in imetrobert.github.io once")]
+    runs = json.loads(body).get("runs") or []
+    if not runs:
+        return [(False, "AI answer check log", "no runs recorded")]
+    last = runs[-1]
+    age = (today.date() - dt.date.fromisoformat(last["date"])).days
+    res = [r for r in last["results"] if "error" not in r]
+    named, cited = sum(r["named"] for r in res), sum(r["cited"] for r in res)
+    prev = ""
+    if len(runs) > 1:
+        pr = [r for r in runs[-2]["results"] if "error" not in r]
+        prev = f"; previous run named {sum(r['named'] for r in pr)}, cited {sum(r['cited'] for r in pr)} of {len(pr)}"
+    detail = f"Gemini named the sites in {named} and cited them in {cited} of {len(res)} questions ({age} days ago){prev}"
+    if age > AI_LOG_MAX_AGE_DAYS:
+        return [(False, "AI answer check", f"last run {age} days ago (more than {AI_LOG_MAX_AGE_DAYS}). {detail}")]
+    return [(True, "AI answer check (Gemini only)", detail)]
+
+
 def check_supabase():
     rows = []
     h = {"apikey": ANON}
@@ -388,7 +414,7 @@ def main():
     item_rows, item_notes = check_items(os.path.join(os.path.dirname(__file__), "..", "ops", "expiries.json"), today)
     sections = [("Live sites", safe("sites", check_sites)), ("Supabase", safe("supabase", check_supabase)),
                 ("Content and search visibility", safe("content", check_content, today)),
-                ("Page quality and links", safe("quality", check_page_quality) + safe("links", check_outbound_links)),
+                ("Page quality and links", safe("quality", check_page_quality) + safe("links", check_outbound_links) + safe("ai", check_ai_answers, today)),
                 ("Latest automated runs in every repo", safe("workflows", check_workflows, today)),
                 ("TLS certificates", safe("tls", check_tls)), ("Domain registration", dom_rows), ("Renewals you track", item_rows)]
     text, failed = render(sections, dom_notes + item_notes)
