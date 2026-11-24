@@ -29,7 +29,7 @@
     {
       "name": "Gmail 'Send mail as' for imetrobert.com / AIWithRobert.com must be replaced",
       "date": "2027-01-01",
-      "renew": "see the email sending setup notes (docs/KEYS.md); then set the date to null or remove this item"
+      "renew": "Gmail 'Send mail as' stops working in Jan 2027: set up a replacement sender (ask Claude to replace Gmail Send mail as for the custom-domain addresses); then remove this item"
     },
     {
       "name": "ElevenLabs commercial licence check (Business video narration)",
