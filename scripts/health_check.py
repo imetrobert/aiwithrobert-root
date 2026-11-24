@@ -168,7 +168,7 @@ def check_content(today):
 # ---- Page quality (SEO / AI-answer basics on every sitemap page) and dead outbound links -----------------------------
 QUALITY_SITES = ["https://seniors.aiwithrobert.com", "https://biz.aiwithrobert.com", "https://www.imetrobert.com"]
 LINK_SKIP = ("linkedin.com", "facebook.com", "instagram.com", "x.com", "twitter.com", "google.com", "goo.gl", "youtube.com",
-             "youtu.be", "wa.me", "tel:", "mailto:")   # these block bots, so a failure there says nothing
+             "youtu.be", "wa.me", "tel:", "mailto:", "googletagmanager.com", "google-analytics.com", "gstatic.com", "googleapis.com")   # these block bots, so a failure there says nothing
 
 
 def page_problems(url, body):
@@ -233,7 +233,7 @@ def check_outbound_links():
         if code != 200:
             continue
         host = host_of(url)
-        links = sorted({m for m in re.findall(r'href=["\'](https?://[^"\'#\s]+)', body)
+        links = sorted({m for m in re.findall(r'<a\s[^>]*href=["\'](https?://[^"\'#\s]+)', body)
                         if host_of(m) != host and not host_of(m).endswith(".".join(host.split(".")[-2:])) and not any(k in m for k in LINK_SKIP)})[:25]
         with concurrent.futures.ThreadPoolExecutor(max_workers=8) as ex:
             res = list(ex.map(lambda l: (l, fetch(l, tries=2, limit=2000)), links))
