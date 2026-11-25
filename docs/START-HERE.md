@@ -35,6 +35,7 @@ All share ONE Supabase project and one login. Who can open what is set at access
   Setup needs two secrets once (see that guide, step 1).
 - **Monthly: Dependabot** in the invoicing, ETF and jobs repos opens one update pull request; the "Build check" says if it is
   safe. Green: Merge. Red: leave it, or paste the failing log to Claude.
+- **1st and 15th: Keepalive commit** (workflow `keepalive-commit.yml` in the hub, seniors, business, toolkit, ETF, marketplace, the three retirement planners, the invoicing app, and `keepalive.yml` in the blog). One tiny bot commit so GitHub never switches off a repo's scheduled jobs after 60 days with no commits (all repos are public). Nothing to do. If a scheduled job ever stops firing, run this workflow by hand from Actions, then re-enable the scheduled workflow if GitHub shows it as disabled.
 - Blog: Actions > Blog health report; Pipeline health page on the review page; `docs/DIAGNOSE.md` in the blog repo.
 
 ## Once a year
