@@ -268,6 +268,62 @@ def check_ai_answers(today):
     return [(True, "AI answer check (Gemini only)", detail)]
 
 
+# ---- Docs for free Claude: single source of truth stays complete, current and small -------------------------------------
+HUB_DOCS = ["APPS", "KEYS", "EMAIL-SETUP", "JANUARY-CHECKLIST", "SEO-AIO-GEO", "BACKUP-RESTORE"]
+REVIEWED_DOCS = ["START-HERE", "EMAIL-SETUP"]
+REVIEW_MAX_AGE_DAYS = 150          # "Last reviewed: YYYY-MM-DD" line; edit the date after you re-read the doc
+CLAUDE_MD_FAIL_BYTES = 16000       # a repo map this big costs tokens on every task; the largest should stay under it
+CLAUDE_MD_NOTE_BYTES = 8000
+
+
+def check_docs(today, root=None):
+    """Hub docs exist and are linked from START-HERE, every repo is named there, review dates are fresh, repo maps stay small."""
+    root = root or os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+    def read(name):
+        try:
+            return open(os.path.join(root, "docs", name + ".md"), encoding="utf-8").read()
+        except OSError:
+            return None
+    start = read("START-HERE")
+    if start is None:
+        return [(False, "Docs for free Claude", "docs/START-HERE.md is missing")]
+    rows, linked = [], (start + (read("APPS") or "")).lower()
+    missing = [d for d in HUB_DOCS if read(d) is None]
+    unlinked = [d for d in HUB_DOCS if d.lower() not in linked]
+    rows.append((not missing and not unlinked, "Hub docs present and linked from START-HERE",
+                 "; ".join(x for x in (("missing: " + ", ".join(missing)) if missing else "",
+                                       ("not named in START-HERE or APPS: " + ", ".join(unlinked)) if unlinked else "") if x)
+                 or f"{len(HUB_DOCS)} docs"))
+    absent = [r for r in REPOS if r.lower() not in start.lower()]
+    rows.append((not absent, "Every repo is named in START-HERE", ("not listed: " + ", ".join(absent)) if absent else f"{len(REPOS)} repos"))
+    old = []
+    for d in REVIEWED_DOCS:
+        m = re.search(r"Last reviewed:\s*(\d{4}-\d{2}-\d{2})", read(d) or "")
+        if not m:
+            old.append(f"{d} has no 'Last reviewed: YYYY-MM-DD' line")
+            continue
+        age = (today.date() - dt.date.fromisoformat(m.group(1))).days
+        if age > REVIEW_MAX_AGE_DAYS:
+            old.append(f"{d} last reviewed {age} days ago")
+    rows.append((not old, "Docs reviewed recently", "; ".join(old) + ". Re-read it, fix anything out of date, then change its date" if old else "up to date"))
+    sizes, unread = {}, []
+    for repo in REPOS:
+        code, body, err = fetch(f"https://raw.githubusercontent.com/{OWNER}/{repo}/main/CLAUDE.md", tries=2, limit=200000)
+        if code == 200:
+            sizes[repo] = len(body.encode("utf-8"))
+        else:
+            unread.append(repo)
+    big = sorted(((n, r) for r, n in sizes.items() if n > CLAUDE_MD_FAIL_BYTES), reverse=True)
+    big_note = sorted(((n, r) for r, n in sizes.items() if n > CLAUDE_MD_NOTE_BYTES), reverse=True)
+    detail = ("over %d bytes: " % CLAUDE_MD_FAIL_BYTES + ", ".join(f"{r} {n}" for n, r in big) + ". Trim it so free Claude reads less") if big else \
+             ("largest: " + ", ".join(f"{r} {n}" for n, r in big_note[:3]) if big_note else "all small")
+    if unread:
+        detail += f" (could not read: {', '.join(unread)})"
+    rows.append((not big, "Repo CLAUDE.md maps stay small", detail))
+    return rows
+
+
+
 def check_supabase():
     rows = []
     h = {"apikey": ANON}
@@ -415,6 +471,7 @@ def main():
     sections = [("Live sites", safe("sites", check_sites)), ("Supabase", safe("supabase", check_supabase)),
                 ("Content and search visibility", safe("content", check_content, today)),
                 ("Page quality and links", safe("quality", check_page_quality) + safe("links", check_outbound_links) + safe("ai", check_ai_answers, today)),
+                ("Docs for free Claude", safe("docs", check_docs, today)),
                 ("Latest automated runs in every repo", safe("workflows", check_workflows, today)),
                 ("TLS certificates", safe("tls", check_tls)), ("Domain registration", dom_rows), ("Renewals you track", item_rows)]
     text, failed = render(sections, dom_notes + item_notes)

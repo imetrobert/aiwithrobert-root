@@ -84,3 +84,20 @@ assert h.check_ai_answers(dt.datetime(2027, 1, 20, tzinfo=dt.timezone.utc))[0][0
 h.fetch = lambda url, *a, **k: (404, "", "HTTP 404")
 assert h.check_ai_answers(dt.datetime(2026, 11, 20, tzinfo=dt.timezone.utc))[0][0] is False
 print("OK ai answers")
+
+# docs for free Claude
+_d = tempfile.mkdtemp(); os.makedirs(os.path.join(_d, "docs"))
+def _w(n, txt): open(os.path.join(_d, "docs", n + ".md"), "w").write(txt)
+for n in h.HUB_DOCS: _w(n, "x")
+_w("START-HERE", "Last reviewed: 2026-11-24 " + " ".join(h.REPOS) + " " + " ".join(h.HUB_DOCS))
+_w("EMAIL-SETUP", "Last reviewed: 2026-11-24")
+h.fetch = lambda url, *a, **k: (200, "x" * 1000, "")
+r = h.check_docs(dt.datetime(2026, 12, 1, tzinfo=dt.timezone.utc), _d)
+assert all(ok for ok, *_ in r), r
+r = h.check_docs(dt.datetime(2027, 6, 1, tzinfo=dt.timezone.utc), _d)
+assert r[2][0] is False and "days ago" in r[2][2], r                 # review date too old
+h.fetch = lambda url, *a, **k: (200, "x" * 17000, "")
+assert h.check_docs(dt.datetime(2026, 12, 1, tzinfo=dt.timezone.utc), _d)[3][0] is False   # CLAUDE.md too big
+os.remove(os.path.join(_d, "docs", "KEYS.md"))
+assert h.check_docs(dt.datetime(2026, 12, 1, tzinfo=dt.timezone.utc), _d)[0][0] is False   # a hub doc missing
+print("OK docs for free Claude")

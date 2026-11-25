@@ -1,6 +1,6 @@
 # Email setup: imetrobert.com and aiwithrobert.com
 
-How every address receives and sends, and where each setting lives. No passwords are kept here. Last reviewed 2026-11-24.
+How every address receives and sends, and where each setting lives. No passwords are kept here. Last reviewed: 2026-11-24.
 
 ## Addresses
 - Sending addresses: robert@imetrobert.com, robert@aiwithrobert.com, biz@aiwithrobert.com, invoices@aiwithrobert.com.
