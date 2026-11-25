@@ -101,3 +101,9 @@ assert h.check_docs(dt.datetime(2026, 12, 1, tzinfo=dt.timezone.utc), _d)[3][0] 
 os.remove(os.path.join(_d, "docs", "KEYS.md"))
 assert h.check_docs(dt.datetime(2026, 12, 1, tzinfo=dt.timezone.utc), _d)[0][0] is False   # a hub doc missing
 print("OK docs for free Claude")
+
+# video upload date needs a timezone
+_v = lambda d: good + '<script type="application/ld+json">{"@type":"VideoObject","uploadDate":"%s"}</script>' % d
+assert h.page_problems("u", _v("2026-11-24T12:00:00-05:00")) == []
+assert any("uploadDate" in p for p in h.page_problems("u", _v("2026-11-24")))
+print("OK video date")

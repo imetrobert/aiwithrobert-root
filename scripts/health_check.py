@@ -198,6 +198,10 @@ def page_problems(url, body):
             missing = [k for k in need if not node.get(k)]
             if missing:
                 out.append(f"{t} schema lacks {', '.join(missing)}")
+            if t == "VideoObject":
+                # Search Console warns unless uploadDate has a time and timezone, e.g. 2026-11-24T12:00:00-05:00
+                if not re.fullmatch(r"\d{4}-\d\d-\d\dT\d\d:\d\d(:\d\d)?(Z|[+-]\d\d:\d\d)", str(node.get("uploadDate", ""))):
+                    out.append("VideoObject uploadDate needs a time and timezone (like 2026-11-24T12:00:00-05:00)")
     return out
 
 
