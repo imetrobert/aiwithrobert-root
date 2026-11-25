@@ -1,5 +1,9 @@
 # START HERE: running all the AI with Robert / imetrobert apps on the free Claude plan
 
+**Single source of truth for Claude (any plan): this file, `docs/START-HERE.md` in `imetrobert/aiwithrobert-root`.** Read it first,
+then only the one doc it points to for the task. Claude's memory is a backup copy of the same facts: if memory and a repo file
+disagree, the repo file wins.
+
 One page for the whole estate. Each repo has its own `CLAUDE.md` (a short map). Free Claude has small limits, so the rule
 is always: **name the repo, name the one file, paste the error. Never ask it to explore.**
 
@@ -39,6 +43,10 @@ All share ONE Supabase project and one login. Who can open what is set at access
 ## Search and AI-answer visibility
 `docs/SEO-AIO-GEO.md`: what is automatic, a 10-minute monthly routine and paste-ready prompts (add a guide, fix a Search Console issue, turn on the rating schema).
 
+## Email (how imetrobert.com and aiwithrobert.com mail is set up)
+`docs/EMAIL-SETUP.md`: receiving (registrar forwarding into Gmail), sending (Brevo SMTP; Gmail send-as until January 2027, then Apple Mail),
+agent rules and known quirks. Open it for any "I can't send / didn't receive / landed in spam" question.
+
 ## Keys and secrets
 `docs/KEYS.md` lists every key and secret, what breaks when one dies and the link to replace it.
 
@@ -67,6 +75,10 @@ All share ONE Supabase project and one login. Who can open what is set at access
 
 **Planner sign-in, welcome banner or saved plans** (all in `account.js`, recipe 10 in each planner repo): same prompt, but read
 the "Two files, two jobs" section of CLAUDE.md first. The Quebec and Ontario copies of account.js should stay in step.
+
+**An email problem** (cannot send, did not arrive, spam folder)
+> Repo imetrobert/aiwithrobert-root. Read only docs/EMAIL-SETUP.md. The problem: DESCRIBE IT, WITH THE ADDRESS AND THE APP I USED.
+> Tell me the most likely cause and the one setting to check first (Brevo, Gmail send-as, Apple Mail or the registrar).
 
 **Restore data**: follow `docs/BACKUP-RESTORE.md` (no computer needed).
 

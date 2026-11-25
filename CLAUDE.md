@@ -34,7 +34,7 @@ Redirect pages stay noindex and unlisted in the sitemap. The hub's JSON-LD (Orga
 
 ## Ops (whole estate)
 
-`docs/APPS.md` lists every app (address, login, purpose). `docs/KEYS.md` lists every key and secret with renewal links. `docs/START-HERE.md` is the one-page map of every app, repo, watcher and paste-ready prompt. Weekly health check:
+`docs/APPS.md` lists every app (address, login, purpose). `docs/KEYS.md` lists every key and secret with renewal links. `docs/START-HERE.md` is the single source of truth and one-page map of every app, repo, watcher and paste-ready prompt (read it first on any plan). `docs/EMAIL-SETUP.md` is how all the email is set up. Weekly health check:
 `scripts/health_check.py` + `.github/workflows/health.yml` (dates to track in `ops/expiries.json`). Weekly encrypted
 Supabase backup and restore: `scripts/backup_supabase.py`, `scripts/restore_supabase.py`, `docs/BACKUP-RESTORE.md`.
 Offline tests: `python3 scripts/test_health.py`, `python3 scripts/test_backup.py`.
