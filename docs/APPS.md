@@ -31,6 +31,9 @@ Ask Claude: "Read APPS.md and tell me about all my apps." For repos, how to fix 
 - (The retirement planners are now web apps; see the three rows above.)
 - CartMatch (pricecheck.imetrobert.com): retired in November 2026.
 
+## Other public properties
+- YouTube channel "AI with Robert for Seniors" (@AIwithRobertforSeniors, https://www.youtube.com/@AIwithRobertforSeniors): intro video https://youtu.be/508rtYini-w, also embedded on the Seniors home page (`#video`, English page only) with VideoObject schema. Linked from the Seniors LocalBusiness `sameAs` and `llms.txt`. Edited in YouTube Studio on the phone; captions (.srt) are uploaded there.
+
 ## Automatic watchers
 Monday health check, Sunday encrypted backup, monthly dependency updates, the blog's own run log. Details: START-HERE.md.
 

@@ -12,6 +12,8 @@
   **Content gap suggestion** (4th) proposes ONE guide worth adding (`ops/content-gap.json`: title, question, outline, page to link to).
   It only suggests; nothing is published.
 
+- Freshness dates are automatic: in the Seniors and Business repos `scripts/stamp_dates.py` (run by CI) sets `lastmod` and `dateModified` from the last real edit. Never edit those dates by hand.
+
 ## Monthly, from your phone (about 10 minutes)
 1. Search Console (seniors, biz, blog): Pages > any "not indexed" new reason? Performance > top 5 queries. Paste anything odd to Claude.
 2. Google Business Profile (Seniors only): one photo or post, reply to every review.
