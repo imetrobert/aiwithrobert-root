@@ -49,7 +49,7 @@ Same registrar screen, DNS Settings = Default. Domain expires 2036-09-29. No pas
 |------|------|-------|
 | @ (4 rows) | A | 185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153 (GitHub Pages) |
 | @ | TXT | `brevo-code:bc67496265e240afb0ce9d91f7405044` |
-| @ | TXT | SPF: `v=spf1 include:_spf.hostedemail.com include:_spf.emfwd.name-services.com mx ~all` (registrar mail and forwarding only; no Brevo, no Google) |
+| @ | TXT | SPF: `v=spf1 include:_spf.hostedemail.com include:_spf.emfwd.name-services.com include:spf.brevo.com mx ~all` (Brevo added 2026-11-26 by Robert; he reported it saved, not re-read by Claude) |
 | _dmarc | TXT | `v=DMARC1; p=none; rua=mailto:rua@dmarc.brevo.com` (monitoring only) |
 | brevo1._domainkey / brevo2._domainkey | CNAME | b1.imetrobert-com.dkim.brevo.com. / b2.imetrobert-com.dkim.brevo.com. |
 | enoms1._domainkey | TXT | `v=DKIM1;t=s;p=MIGfMA0GCSqGSIb3DQEBAQUA...` (registrar's own DKIM public key, complete on the registrar screen) |
@@ -60,7 +60,7 @@ Same registrar screen, DNS Settings = Default. Domain expires 2036-09-29. No pas
 | blog | URL redirect | https://www.imetrobert.com/blog |
 | facebook, linkedin, twitter, youtube, videochat | URL redirect | his profile and video-room links |
 - No MX records. Email Forwarding is on for about 13 addresses (robert@, forms@, invest@, eq@, junk@, tangerine@, test@, Windscribe@, three belltest addresses, and two family addresses), most to Robert's Gmail.
-- Differences from aiwithrobert.com: DMARC here is p=none (aiwithrobert.com is p=quarantine). The SPF here has no Brevo include (confirmed 2026-11-26). Brevo's DKIM CNAMEs exist, so DMARC can still pass through DKIM, but adding Brevo to SPF is the safer setup. Proposed (NOT yet applied): `v=spf1 include:_spf.hostedemail.com include:_spf.emfwd.name-services.com include:spf.brevo.com mx ~all`. Not confirmed as the cause of the November spam-folder case.
+- Differences from aiwithrobert.com: DMARC here is p=none (aiwithrobert.com is p=quarantine). The SPF here had no Brevo include until 2026-11-26, when Robert added `include:spf.brevo.com` (before: only hostedemail and the registrar's forwarding include). DMARC stays p=none until a header test shows Brevo mail passing DKIM and every sender uses Brevo. Not confirmed as the cause of the November spam-folder case.
 
 ## Related
 Invoices are emailed through EmailJS (200 per cycle, resets on the 10th), a separate path. See `docs/KEYS.md`.
