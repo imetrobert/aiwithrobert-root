@@ -34,6 +34,7 @@ Claude on the free plan opens WEB LINKS, not names like "imetrobert/REPO, docs/F
 |---|---|---|
 | Change a Seniors price or wording | `aiwithrobert`: CLAUDE.md, `docs/common-edits.md` "Change a price" | Group workshop is $35 per person; $275 is the 5-hour Starter. Confirm which price before editing |
 | Change a Business price or wording | `aiwithrobert-biz`: CLAUDE.md, `docs/common-edits.md` | Also toolkit `FX_PRICE` and invoicing `BUSINESS_SERVICES` |
+| Change the Prospect finder (who to pitch: search prompt, list import, queue into the Pitch builder) | `aiwithrobert-toolkit`: CLAUDE.md, `docs/common-edits.md` "Prospect finder", then `docs/code-map.md` | Search `fdPrompt`, `fdRead`; paste only that block into the chat. List is kept on the phone only |
 | Change the Pitch builder (find-clients pitch: wording, services named, PDF layout, follow-up days) | `aiwithrobert-toolkit`: CLAUDE.md, `docs/common-edits.md` "Pitch builder", then `docs/code-map.md` | Edit only the block named in the recipe (search `ptPrompt`, `ptPage`, `PT_TXT`); paste just that block into the chat, never the whole index.html. Rules: no invented results, plain-text email |
 | Weekly health check is red | this repo: the FAIL line of the run, then this file | Re-run: Actions > Weekly health check > Run workflow |
 | Mail goes to spam or does not arrive | this repo: `docs/EMAIL-SETUP.md` | Needs DNS facts the doc may lack: ask Robert to paste the registrar records |
