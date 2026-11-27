@@ -66,5 +66,8 @@ Same registrar screen, DNS Settings = Default. Domain expires 2036-09-29. No pas
 Sent from robert@imetrobert.com (Apple Mail through Brevo SMTP) to mail-tester.com: 7.5/10. Authenticated: DKIM valid and aligned with imetrobert.com (this is what satisfies DMARC), SPF pass (for Brevo's own sending domain, so the SPF include added to imetrobert.com is harmless but not what carries the mail), good sender reputation, not blocklisted, no broken links. Lost points were content only: HTML-only message with little text, a remote image, and the normal "From and envelope-from differ" for Brevo. A retest with a few sentences of plain text and no signature image should score higher. The earlier November case was Promotions-tab placement, not spam (see Deliverability).
 Second test, from biz@aiwithrobert.com (same route): 8.5/10, properly authenticated (DKIM valid and aligned with aiwithrobert.com, SPF pass, good reputation, not blocklisted). Lost points: 2 images without alt text in the message (-0.5), HTML and plain-text parts differ (-0.7), and the normal Brevo From/envelope difference. So the stricter DMARC p=quarantine on aiwithrobert.com is safe for mail sent this way. Small gain available: add alt text to images in the email signature or template.
 
+## imetrobert.com cleanup (2026-11-26)
+Robert reported removing the unused test forwards (belltest1-3, test, junk, tangerine, Windscribe) and the dead videochat redirect at the registrar. Claude has not seen the result, so the two imetrobert.com tables above may still list them: send a fresh screenshot of the Host Records and Email Forwarding sections to bring them up to date.
+
 ## Related
 Invoices are emailed through EmailJS (200 per cycle, resets on the 10th), a separate path. See `docs/KEYS.md`.
