@@ -1,6 +1,6 @@
 # Email setup: imetrobert.com and aiwithrobert.com
 
-How every address receives and sends, and where each setting lives. No passwords are kept here. Last reviewed: 2026-11-24.
+How every address receives and sends, and where each setting lives. No passwords are kept here. Last reviewed: 2026-11-26.
 
 ## Addresses
 - Sending addresses: robert@imetrobert.com, robert@aiwithrobert.com, biz@aiwithrobert.com, invoices@aiwithrobert.com.
@@ -27,6 +27,22 @@ Mail sent through Brevo from Apple Mail has no server-side Sent folder (the doma
 
 ## Deliverability
 Priorities: 1) keep sending from these addresses after January 2027; 2) avoid spam folders. A November 2026 email from imetrobert.com to a gmail.com recipient landed in Promotions/Spam; the investigation was started and is not closed.
+
+## DNS records for aiwithrobert.com (copied from the registrar screen, 2026-11-26)
+Where: access.name-services.com, Domain Settings, Host Records (DNS Settings = Default). Domain expires 2031-01-12. Public information only; no passwords. Other domain (imetrobert.com) not yet recorded here.
+| Host | Type | Value |
+|------|------|-------|
+| @ (4 rows) | A | 185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153 (GitHub Pages) |
+| @ | TXT | SPF: `v=spf1 include:_spf.google.com include:spf.emailj...` (end of line cut off on screen; open the row to read it all) |
+| @ | TXT | `brevo-code:bc67496265e240afb0ce9d91f7405044` (Brevo domain check) |
+| _dmarc | TXT | `v=DMARC1; p=quarantine; rua=mailto:rua@dmar...` (end cut off on screen) |
+| brevo1._domainkey | CNAME | b1.aiwithrobert-com.dkim.brevo.com. |
+| brevo2._domainkey | CNAME | b2.aiwithrobert-com.dkim.brevo.com. |
+| q7pam4nsvc6x | CNAME | gv-ex4nm2isbhxxtx.dv.googlehosted.com. (Google verification record) |
+| www, biz, invoices, seniors, toolkit, retireon, retireqc, retraiteqc | CNAME | imetrobert.github.io. (GitHub Pages) |
+- No MX records are listed: mail is received through the registrar's Email Forwarding (biz@, forms@, info@, invoices@, robert@, seniors@ forward to Robert's Gmail, all enabled). Forwarding changes can take up to 60 minutes.
+- The SPF line lists Google and EmailJS but no Brevo include on screen; check the cut-off part for Brevo. Brevo's DKIM records above are present. This may relate to the open deliverability question; not confirmed.
+- To finish this table: open the two cut-off TXT rows and paste the full values to Claude.
 
 ## Related
 Invoices are emailed through EmailJS (200 per cycle, resets on the 10th), a separate path. See `docs/KEYS.md`.
