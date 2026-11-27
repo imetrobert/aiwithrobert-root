@@ -91,6 +91,7 @@ def _w(n, txt): open(os.path.join(_d, "docs", n + ".md"), "w").write(txt)
 for n in h.HUB_DOCS: _w(n, "x")
 _w("START-HERE", "Last reviewed: 2026-11-24 " + " ".join(h.REPOS) + " " + " ".join(h.HUB_DOCS))
 _w("EMAIL-SETUP", "Last reviewed: 2026-11-24")
+_w("LINKS", "https://raw.githubusercontent.com/imetrobert/jobs/main/CLAUDE.md")
 h.fetch = lambda url, *a, **k: (200, "x" * 1000, "")
 r = h.check_docs(dt.datetime(2026, 12, 1, tzinfo=dt.timezone.utc), _d)
 assert all(ok for ok, *_ in r), r
@@ -100,6 +101,9 @@ h.fetch = lambda url, *a, **k: (200, "x" * 17000, "")
 assert h.check_docs(dt.datetime(2026, 12, 1, tzinfo=dt.timezone.utc), _d)[3][0] is False   # CLAUDE.md too big
 os.remove(os.path.join(_d, "docs", "KEYS.md"))
 assert h.check_docs(dt.datetime(2026, 12, 1, tzinfo=dt.timezone.utc), _d)[0][0] is False   # a hub doc missing
+h.fetch = lambda url, *a, **k: (404, "", "HTTP 404")
+_r = h.check_docs(dt.datetime(2026, 12, 1, tzinfo=dt.timezone.utc), _d)   # only CLAUDE.md fetches fail here too, link row is last
+assert _r[-1][0] is False and "dead" in _r[-1][2], _r                      # a dead link turns the check red
 print("OK docs for free Claude")
 
 # video upload date needs a timezone
