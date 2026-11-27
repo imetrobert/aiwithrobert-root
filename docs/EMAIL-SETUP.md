@@ -49,7 +49,7 @@ Same registrar screen, DNS Settings = Default. Domain expires 2036-09-29. No pas
 |------|------|-------|
 | @ (4 rows) | A | 185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153 (GitHub Pages) |
 | @ | TXT | `brevo-code:bc67496265e240afb0ce9d91f7405044` |
-| @ | TXT | SPF: `v=spf1 include:_spf.hostedemail.com include:_spf.emfwd.name-services.com include:spf.brevo.com mx ~all` (Brevo added 2026-11-26 by Robert; he reported it saved, not re-read by Claude) |
+| @ | TXT | SPF: `v=spf1 include:_spf.hostedemail.com include:_spf.emfwd.name-services.com include:spf.brevo.com mx ~all` (Brevo added 2026-11-26 by Robert; he re-opened the row and the saved value matched) |
 | _dmarc | TXT | `v=DMARC1; p=none; rua=mailto:rua@dmarc.brevo.com` (monitoring only) |
 | brevo1._domainkey / brevo2._domainkey | CNAME | b1.imetrobert-com.dkim.brevo.com. / b2.imetrobert-com.dkim.brevo.com. |
 | enoms1._domainkey | TXT | `v=DKIM1;t=s;p=MIGfMA0GCSqGSIb3DQEBAQUA...` (registrar's own DKIM public key, complete on the registrar screen) |
