@@ -33,16 +33,16 @@ Where: access.name-services.com, Domain Settings, Host Records (DNS Settings = D
 | Host | Type | Value |
 |------|------|-------|
 | @ (4 rows) | A | 185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153 (GitHub Pages) |
-| @ | TXT | SPF: `v=spf1 include:_spf.google.com include:spf.emailj...` (end of line cut off on screen; open the row to read it all) |
+| @ | TXT | SPF: `v=spf1 include:_spf.google.com include:spf.emailjs.com include:spf.brevo.com ~all` (Google, EmailJS, Brevo; complete) |
 | @ | TXT | `brevo-code:bc67496265e240afb0ce9d91f7405044` (Brevo domain check) |
-| _dmarc | TXT | `v=DMARC1; p=quarantine; rua=mailto:rua@dmar...` (end cut off on screen) |
+| _dmarc | TXT | `v=DMARC1; p=quarantine; rua=mailto:rua@dmarc.brevo.com` (complete; reports go to Brevo) |
 | brevo1._domainkey | CNAME | b1.aiwithrobert-com.dkim.brevo.com. |
 | brevo2._domainkey | CNAME | b2.aiwithrobert-com.dkim.brevo.com. |
 | q7pam4nsvc6x | CNAME | gv-ex4nm2isbhxxtx.dv.googlehosted.com. (Google verification record) |
 | www, biz, invoices, seniors, toolkit, retireon, retireqc, retraiteqc | CNAME | imetrobert.github.io. (GitHub Pages) |
 - No MX records are listed: mail is received through the registrar's Email Forwarding (biz@, forms@, info@, invoices@, robert@, seniors@ forward to Robert's Gmail, all enabled). Forwarding changes can take up to 60 minutes.
-- The SPF line lists Google and EmailJS but no Brevo include on screen; check the cut-off part for Brevo. Brevo's DKIM records above are present. This may relate to the open deliverability question; not confirmed.
-- To finish both tables: open the cut-off SPF and DMARC rows on each domain and paste the full values to Claude.
+- SPF includes Brevo, and Brevo's DKIM records are present, so aiwithrobert.com is correctly set up for Brevo sending.
+- Still cut off: the SPF and DMARC rows for imetrobert.com (see its table). Paste them to Claude to finish.
 
 ## DNS records for imetrobert.com (copied from the registrar screen, 2026-11-26)
 Same registrar screen, DNS Settings = Default. Domain expires 2036-09-29. No passwords. Family forwarding addresses are deliberately not listed here.
