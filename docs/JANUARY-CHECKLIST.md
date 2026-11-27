@@ -7,7 +7,7 @@ Rule: never invent a number. Open the official table (links below), copy the fig
 
 ## 1. The three retirement planners (about 20 minutes each with Claude)
 Repos: `aiwithrobert-retireqc` (Quebec), `aiwithrobert-retireon` (Ontario), `imetrobert-retire` (personal).
-Each repo has the full steps in `docs/common-edits.md`, recipe 1 "Yearly tax update". In short, in each repo:
+Each repo has the full steps in `docs/common-edits.md`, recipe 1 "Yearly tax update", which now ends with a "January checklist, key by key" listing every `getDefaultTaxRules()` key that usually changes and every one that normally stays. In short, in each repo:
 1. `getDefaultTaxRules()` in `index.html`: brackets, basic amounts, age and pension credits, `verifiedDate`.
 2. `TFSA_ANNUAL_LIMIT` (grep it).
 3. Default maximum QPP/CPP and OAS monthly amounts (OAS changes each quarter).
