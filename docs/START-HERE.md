@@ -60,6 +60,15 @@ All share ONE Supabase project and one login. Who can open what is set at access
 `docs/EMAIL-SETUP.md`: receiving (registrar forwarding into Gmail), sending (Brevo SMTP; Gmail send-as until January 2027, then Apple Mail),
 agent rules and known quirks. Open it for any "I can't send / didn't receive / landed in spam" question.
 
+## Robert's tools and habits (so free Claude never has to ask)
+- **Works on an iPhone only**: edits through GitHub's web pages and Safari. Give phone-friendly steps; never ask him to use a terminal or a desktop.
+- **Analytics**: one shared Google Analytics property (539541576) for the Seniors and Business sites, split by the "Site" dimension; link: https://analytics.google.com/analytics/web/#/p539541576/reports/intelligenthome. His Looker Studio report "Website results" sits in his Google account (https://lookerstudio.google.com/); its link is pasted into the toolkit's Website analytics screen, kept per device in the browser, so a new phone shows empty boxes until he pastes it again. If the link is lost, he re-copies it from Looker Studio (Share, Copy link).
+- **Own-visit opt-out**: opening any of his sites once with `?countme=1` stops counting that device in the toolkit counters and Google Analytics; `?countme=0` counts again. His Home Screen shortcuts carry it.
+- **Agents he uses**: Muse (his email and day-to-day agent; any @aiwithrobert.com mail is business mail and it gives a paste-ready draft; it only needs his GitHub sign-in for on-request code changes, nothing scheduled depends on it) and Instinct (keeps his list of prompts to give free Claude). Both are his; free Claude cannot reach them.
+- **GitHub upkeep needs no sign-in**: `keepalive-commit.yml` (1st and 15th) stops GitHub pausing scheduled jobs; the blog uses `keepalive.yml`.
+- **Free-tier rules**: free tools only, no paid services. Quota note: the blog's free Gemini allowance is about four full runs a day.
+- **Public channels**: YouTube channel and intro videos are listed in `docs/APPS.md`. YouTube cannot be edited by Claude; he does that in YouTube Studio.
+
 ## Keys and secrets
 `docs/KEYS.md` lists every key and secret, what breaks when one dies and the link to replace it.
 
