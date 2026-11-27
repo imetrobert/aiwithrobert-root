@@ -1,11 +1,14 @@
 # START HERE: running all the AI with Robert / imetrobert apps on the free Claude plan
 
 **Single source of truth for Claude (any plan): this file, `docs/START-HERE.md` in `imetrobert/aiwithrobert-root`.** Read it first,
-then only the one doc it points to for the task. Last reviewed: 2026-11-24 (the weekly health check goes red after 150 days; re-read this page, fix anything stale, then change the date. `docs/EMAIL-SETUP.md` carries its own "Last reviewed" date and goes red the same way: check addresses, repo names and counts against reality, then update both dates. The red row reads "START-HERE last reviewed N days ago" under "Docs for free Claude".). Claude's memory is a backup copy of the same facts: if memory and a repo file
+then only the one doc it points to for the task. Last reviewed: 2026-11-26 (the weekly health check goes red after 150 days; re-read this page, fix anything stale, then change the date. `docs/EMAIL-SETUP.md` carries its own "Last reviewed" date and goes red the same way: check addresses, repo names and counts against reality, then update both dates. The red row reads "START-HERE last reviewed N days ago" under "Docs for free Claude".). Claude's memory is a backup copy of the same facts: if memory and a repo file
 disagree, the repo file wins.
 
 One page for the whole estate. Each repo has its own `CLAUDE.md` (a short map). Free Claude has small limits, so the rule
 is always: **name the repo, name the one file, paste the error. Never ask it to explore.**
+
+## How to open a file (read this if you cannot find a file)
+Claude on the free plan opens WEB LINKS, not names like "imetrobert/REPO, docs/FILE". Every doc named in this page has a full link in `docs/LINKS.md`: https://raw.githubusercontent.com/imetrobert/aiwithrobert-root/main/docs/LINKS.md . Open that link, find the repo and file, open its link. Never guess a link and never say the repo is private: all repos are public. If a link fails, say which one and ask Robert to paste the file.
 
 ## The apps
 
@@ -73,6 +76,8 @@ agent rules and known quirks. Open it for any "I can't send / didn't receive / l
 `docs/KEYS.md` lists every key and secret, what breaks when one dies and the link to replace it.
 
 ## Prompts to paste (replace the capitals)
+Add the start link to every prompt (free Claude cannot open a repo by name): https://raw.githubusercontent.com/imetrobert/aiwithrobert-root/main/docs/START-HERE.md . Other files: use their link from `docs/LINKS.md`.
+
 **Something is broken**
 > Repo imetrobert/REPO. Read only CLAUDE.md and FILE. This error appeared: ERROR TEXT. Find the cause and give me the smallest
 > edit as a ready-to-paste replacement for that one section. Do not read other files unless you must, and say which.
@@ -108,9 +113,9 @@ the "Two files, two jobs" section of CLAUDE.md first. The Quebec and Ontario cop
 `Supabase-platform-` (docs/index.html, docs/invite.html) and the invite function (migration/invite_user.sql, run by hand).
 
 ## What free Claude cannot do (say so quickly instead of trying)
-- It may not remember earlier chats: always open with the START-HERE opener and name the repo, the one file and the error. The opener is: "Read docs/START-HERE.md in imetrobert/aiwithrobert-root first. Then read FILE in imetrobert/REPO. Then TASK. Do not read anything else." (Capitals are what Robert fills in.)
+- It may not remember earlier chats: always open with the START-HERE opener and name the repo, the one file and the error. The opener is: "Read docs/START-HERE.md in imetrobert/aiwithrobert-root first (link: https://raw.githubusercontent.com/imetrobert/aiwithrobert-root/main/docs/START-HERE.md). Then read FILE in imetrobert/REPO. Then TASK. Do not read anything else." (Capitals are what Robert fills in.)
 - It cannot run code or tests; the repo's own CI does ("Checks" or "Build Assets" in Actions). Commit, wait 2-3 minutes, read the run.
-- It cannot read private repo files or logs without a connected repo or a pasted copy; paste the one section or the failing log lines.
+- It can open only web links (see "How to open a file"); it cannot open repo names, Actions logs or anything behind a sign-in. Paste the one section or the failing log lines.
 - It cannot log in anywhere for you: Supabase, Brevo, EmailJS, the registrar, GitHub tokens, YouTube Studio and Search Console are yours to click. KEYS.md has the links.
 - Needs a desktop (rare): the Google Cloud setup for a Search Console data pull. Everything else here works from the phone.
 

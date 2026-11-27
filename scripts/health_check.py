@@ -273,7 +273,7 @@ def check_ai_answers(today):
 
 
 # ---- Docs for free Claude: single source of truth stays complete, current and small -------------------------------------
-HUB_DOCS = ["APPS", "KEYS", "EMAIL-SETUP", "JANUARY-CHECKLIST", "SEO-AIO-GEO", "BACKUP-RESTORE"]
+HUB_DOCS = ["APPS", "KEYS", "EMAIL-SETUP", "JANUARY-CHECKLIST", "SEO-AIO-GEO", "BACKUP-RESTORE", "LINKS"]
 REVIEWED_DOCS = ["START-HERE", "EMAIL-SETUP"]
 REVIEW_MAX_AGE_DAYS = 150          # "Last reviewed: YYYY-MM-DD" line; edit the date after you re-read the doc
 CLAUDE_MD_FAIL_BYTES = 16000       # a repo map this big costs tokens on every task; the largest should stay under it
@@ -324,6 +324,11 @@ def check_docs(today, root=None):
     if unread:
         detail += f" (could not read: {', '.join(unread)})"
     rows.append((not big, "Repo CLAUDE.md maps stay small", detail))
+    # every direct link free Claude is told to open must still work (a renamed file would otherwise fail silently)
+    urls = sorted(set(re.findall(r"https://raw\.githubusercontent\.com/[^\s)]+", read("LINKS") or "")))
+    dead = [u.split("/main/")[-1] + " (" + u.split("/")[4] + ")" for u in urls if fetch(u, tries=2, limit=2000)[0] != 200]
+    rows.append((bool(urls) and not dead, "Direct links open (docs/LINKS.md)",
+                 ("no links found in LINKS.md" if not urls else (("dead: " + ", ".join(dead[:6]) + ". A file was renamed or removed: fix docs/LINKS.md and START-HERE") if dead else f"{len(urls)} links"))))
     return rows
 
 
