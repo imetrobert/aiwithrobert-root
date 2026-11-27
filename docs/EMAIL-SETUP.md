@@ -29,7 +29,7 @@ Mail sent through Brevo from Apple Mail has no server-side Sent folder (the doma
 Priorities: 1) keep sending from these addresses after January 2027; 2) avoid spam folders. A November 2026 email from imetrobert.com to a gmail.com recipient landed in Promotions/Spam; the investigation was started and is not closed.
 
 ## DNS records for aiwithrobert.com (copied from the registrar screen, 2026-11-26)
-Where: access.name-services.com, Domain Settings, Host Records (DNS Settings = Default). Domain expires 2031-01-12. Public information only; no passwords. Other domain (imetrobert.com) not yet recorded here.
+Where: access.name-services.com, Domain Settings, Host Records (DNS Settings = Default). Domain expires 2031-01-12. Public information only; no passwords.
 | Host | Type | Value |
 |------|------|-------|
 | @ (4 rows) | A | 185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153 (GitHub Pages) |
@@ -42,7 +42,26 @@ Where: access.name-services.com, Domain Settings, Host Records (DNS Settings = D
 | www, biz, invoices, seniors, toolkit, retireon, retireqc, retraiteqc | CNAME | imetrobert.github.io. (GitHub Pages) |
 - No MX records are listed: mail is received through the registrar's Email Forwarding (biz@, forms@, info@, invoices@, robert@, seniors@ forward to Robert's Gmail, all enabled). Forwarding changes can take up to 60 minutes.
 - The SPF line lists Google and EmailJS but no Brevo include on screen; check the cut-off part for Brevo. Brevo's DKIM records above are present. This may relate to the open deliverability question; not confirmed.
-- To finish this table: open the two cut-off TXT rows and paste the full values to Claude.
+- To finish both tables: open the cut-off SPF and DMARC rows on each domain and paste the full values to Claude.
+
+## DNS records for imetrobert.com (copied from the registrar screen, 2026-11-26)
+Same registrar screen, DNS Settings = Default. Domain expires 2036-09-29. No passwords. Family forwarding addresses are deliberately not listed here.
+| Host | Type | Value |
+|------|------|-------|
+| @ (4 rows) | A | 185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153 (GitHub Pages) |
+| @ | TXT | `brevo-code:bc67496265e240afb0ce9d91f7405044` |
+| @ | TXT | SPF: `v=spf1 include:_spf.hostedemail.com include:_spf...` (rest cut off on screen) |
+| _dmarc | TXT | `v=DMARC1; p=none; rua=mailto:rua@dmarc.brev...` (end cut off; policy is p=none, monitoring only) |
+| brevo1._domainkey / brevo2._domainkey | CNAME | b1.imetrobert-com.dkim.brevo.com. / b2.imetrobert-com.dkim.brevo.com. |
+| enoms1._domainkey | TXT | `v=DKIM1;t=s;p=MIGfMA0GCSqGSIb3DQEBAQUA...` (old registrar DKIM key, cut off) |
+| hguv54hap5ji | CNAME | gv-kbjvsiuz2iqdcv.dv.googlehosted.com. (Google verification) |
+| www, access, fbmarket, invest, jobs, retire, tax | CNAME | imetrobert.github.io. (GitHub Pages) |
+| ebook | CNAME | domains.gumroad.com. |
+| ai, aimarketing | URL redirect | a Gumroad product page |
+| blog | URL redirect | https://www.imetrobert.com/blog |
+| facebook, linkedin, twitter, youtube, videochat | URL redirect | his profile and video-room links |
+- No MX records. Email Forwarding is on for about 13 addresses (robert@, forms@, invest@, eq@, junk@, tangerine@, test@, Windscribe@, three belltest addresses, and two family addresses), most to Robert's Gmail.
+- Differences from aiwithrobert.com: DMARC here is p=none (aiwithrobert.com is p=quarantine). The SPF here names hostedemail.com (registrar mail) so far; check the cut-off part for Brevo. This may relate to the November spam-folder problem; not confirmed.
 
 ## Related
 Invoices are emailed through EmailJS (200 per cycle, resets on the 10th), a separate path. See `docs/KEYS.md`.
