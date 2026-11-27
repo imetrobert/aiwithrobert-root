@@ -62,5 +62,8 @@ Same registrar screen, DNS Settings = Default. Domain expires 2036-09-29. No pas
 - No MX records. Email Forwarding is on for about 13 addresses (robert@, forms@, invest@, eq@, junk@, tangerine@, test@, Windscribe@, three belltest addresses, and two family addresses), most to Robert's Gmail.
 - Differences from aiwithrobert.com: DMARC here is p=none (aiwithrobert.com is p=quarantine). The SPF here had no Brevo include until 2026-11-26, when Robert added `include:spf.brevo.com` (before: only hostedemail and the registrar's forwarding include). DMARC stays p=none until a header test shows Brevo mail passing DKIM and every sender uses Brevo. Not confirmed as the cause of the November spam-folder case.
 
+## Test result: mail-tester, 2026-11-26
+Sent from robert@imetrobert.com (Apple Mail through Brevo SMTP) to mail-tester.com: 7.5/10. Authenticated: DKIM valid and aligned with imetrobert.com (this is what satisfies DMARC), SPF pass (for Brevo's own sending domain, so the SPF include added to imetrobert.com is harmless but not what carries the mail), good sender reputation, not blocklisted, no broken links. Lost points were content only: HTML-only message with little text, a remote image, and the normal "From and envelope-from differ" for Brevo. A retest with a few sentences of plain text and no signature image should score higher. Not yet tested from an @aiwithrobert.com address. The earlier November spam-folder case is still not explained.
+
 ## Related
 Invoices are emailed through EmailJS (200 per cycle, resets on the 10th), a separate path. See `docs/KEYS.md`.
