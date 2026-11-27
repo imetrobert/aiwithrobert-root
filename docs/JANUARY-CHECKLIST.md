@@ -1,7 +1,7 @@
 # January checklist (once a year)
 
 Do this in the first half of January. The weekly health check turns red from 1 January because of the dated item in
-`ops/expiries.json` ("Update tax numbers for the new year"). When done, move that date to the next 15 January.
+`ops/expiries.json` ("Update tax numbers for the new year"). When done, move that date to the next 15 January: in `ops/expiries.json` find the entry named "Update tax numbers for the new year" and change its date field to the next 15 January. If the official 2027 tables are not published yet, wait and paste them when they are; never guess a number.
 
 Rule: never invent a number. Open the official table (links below), copy the figures, and name the table in your commit.
 
@@ -11,7 +11,7 @@ Each repo has the full steps in `docs/common-edits.md`, recipe 1 "Yearly tax upd
 1. `getDefaultTaxRules()` in `index.html`: brackets, basic amounts, age and pension credits, `verifiedDate`.
 2. `TFSA_ANNUAL_LIMIT` (grep it).
 3. Default maximum QPP/CPP and OAS monthly amounts (OAS changes each quarter).
-4. `APP_VERSION` and the `<title>` ("2026 rules" becomes the new year).
+4. `APP_VERSION` and the `<title>` ("2026 rules" becomes the new year). Also search each repo for "2026" in the page text and in `docs/guide/en.md` (and `fr.md` in Quebec); the guide PDF is rebuilt by its workflow.
 5. `scripts/test_tax.py`: update its own "PARAMETERS" block at the top to the same official numbers.
    It is a deliberate second copy, so a typo in one shows up as a red check.
 6. Quebec only: `python3 scripts/audit_french.py` if any English wording changed.

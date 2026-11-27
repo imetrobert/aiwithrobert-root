@@ -1,7 +1,7 @@
 # START HERE: running all the AI with Robert / imetrobert apps on the free Claude plan
 
 **Single source of truth for Claude (any plan): this file, `docs/START-HERE.md` in `imetrobert/aiwithrobert-root`.** Read it first,
-then only the one doc it points to for the task. Last reviewed: 2026-11-24 (the weekly health check goes red after 150 days; re-read this page, fix anything stale, then change the date). Claude's memory is a backup copy of the same facts: if memory and a repo file
+then only the one doc it points to for the task. Last reviewed: 2026-11-24 (the weekly health check goes red after 150 days; re-read this page, fix anything stale, then change the date. `docs/EMAIL-SETUP.md` carries its own "Last reviewed" date and goes red the same way: check addresses, repo names and counts against reality, then update both dates. The red row reads "START-HERE last reviewed N days ago" under "Docs for free Claude".). Claude's memory is a backup copy of the same facts: if memory and a repo file
 disagree, the repo file wins.
 
 One page for the whole estate. Each repo has its own `CLAUDE.md` (a short map). Free Claude has small limits, so the rule
@@ -25,6 +25,18 @@ is always: **name the repo, name the one file, paste the error. Never ask it to 
 | Ontario planner | retireon.aiwithrobert.com | aiwithrobert-retireon | CLAUDE.md, docs/common-edits.md | push to main; CI checks |
 | Personal planner (only Robert) | retire.imetrobert.com | imetrobert-retire (public repo, no personal figures in it) | CLAUDE.md, docs/common-edits.md | push to main; CI checks |
 | Access rights | access.imetrobert.com | Supabase-platform- | README.md | push to main |
+
+## Task router (the common jobs: go straight to the file)
+| Job | Repo and file to read | Note |
+|---|---|---|
+| Change a Seniors price or wording | `aiwithrobert`: CLAUDE.md, `docs/common-edits.md` "Change a price" | Group workshop is $35 per person; $275 is the 5-hour Starter. Confirm which price before editing |
+| Change a Business price or wording | `aiwithrobert-biz`: CLAUDE.md, `docs/common-edits.md` | Also toolkit `FX_PRICE` and invoicing `BUSINESS_SERVICES` |
+| Weekly health check is red | this repo: the FAIL line of the run, then this file | Re-run: Actions > Weekly health check > Run workflow |
+| Mail goes to spam or does not arrive | this repo: `docs/EMAIL-SETUP.md` | Needs DNS facts the doc may lack: ask Robert to paste the registrar records |
+| Blog run failed | `imetrobert.github.io`: `docs/DIAGNOSE.md`, the Step 2 error-code table (top of the file) | Read the first 40 lines only |
+| Yearly tax update (3 planners) | this repo: `docs/JANUARY-CHECKLIST.md`, then each planner's `docs/common-edits.md` recipe 1 | Recipe 1, not 9 |
+| Small planner feature or fix | the planner repo: CLAUDE.md, `docs/common-edits.md` recipe 9 | |
+| Spam, keys, accounts, DNS | `docs/KEYS.md` | Sign-ins are Robert's to click |
 
 All share ONE Supabase project and one login. Who can open what is set at access.imetrobert.com.
 
@@ -60,7 +72,7 @@ agent rules and known quirks. Open it for any "I can't send / didn't receive / l
 > Open the failing run of "Weekly health check" in imetrobert/aiwithrobert-root (link in the email). Read docs/START-HERE.md and
 > the line marked FAIL. Tell me what is wrong and the fix. Ask before touching any other repo.
 
-**Change wording or a price** (a price lives in FIVE places: the Business site `index.html` + `js/i18n.js` + `llms.txt`, the toolkit
+**Change wording or a price** (SENIORS prices live in the Seniors site `index.html`, `js/i18n.js`, `js/language.js`, `llms.txt`, `scripts/articles_data.py` AND the invoicing app `src/lib/services.js` (starter-package, complete-package); derived text such as "save $25" and "$55/hr" must be recomputed. A BUSINESS price lives in FIVE places: the Business site `index.html` + `js/i18n.js` + `llms.txt`, the toolkit
 `FX_PRICE`, and the invoicing app `src/lib/services.js` BUSINESS_SERVICES; the repos' own weekly checks flag any mismatch)
 > I want to change PRICE/WORDING from X to Y. Read CLAUDE.md and docs/common-edits.md in REPO and list every file and line to
 > change. Then give me each edit as a small snippet.
@@ -70,7 +82,7 @@ agent rules and known quirks. Open it for any "I can't send / didn't receive / l
 
 **Add a small feature or fix to a retirement planner** (Quebec, Ontario or Personal; each is one `index.html` plus a small `account.js`)
 > Repo imetrobert/REPO (aiwithrobert-retireqc, aiwithrobert-retireon or imetrobert-retire). Read only CLAUDE.md and
-> docs/common-edits.md (recipe 9). I want: WHAT I SEE AND WHERE. Use grep or docs/code-map.md, never read index.html whole. Give me
+> docs/common-edits.md (recipe 9; for the yearly tax update use recipe 1 and docs/JANUARY-CHECKLIST.md instead). I want: WHAT I SEE AND WHERE. Use grep or docs/code-map.md, never read index.html whole. Give me
 > the smallest edit as a ready-to-paste snippet with the line to find. Quebec: include the French text. Keep index.html free of
 > network calls. After I commit, the Checks workflow tells me if something broke.
 
@@ -87,7 +99,7 @@ the "Two files, two jobs" section of CLAUDE.md first. The Quebec and Ontario cop
 `Supabase-platform-` (docs/index.html, docs/invite.html) and the invite function (migration/invite_user.sql, run by hand).
 
 ## What free Claude cannot do (say so quickly instead of trying)
-- It may not remember earlier chats: always open with the START-HERE opener and name the repo, the one file and the error.
+- It may not remember earlier chats: always open with the START-HERE opener and name the repo, the one file and the error. The opener is: "Read docs/START-HERE.md in imetrobert/aiwithrobert-root first. Then read FILE in imetrobert/REPO. Then TASK. Do not read anything else." (Capitals are what Robert fills in.)
 - It cannot run code or tests; the repo's own CI does ("Checks" or "Build Assets" in Actions). Commit, wait 2-3 minutes, read the run.
 - It cannot read private repo files or logs without a connected repo or a pasted copy; paste the one section or the failing log lines.
 - It cannot log in anywhere for you: Supabase, Brevo, EmailJS, the registrar, GitHub tokens, YouTube Studio and Search Console are yours to click. KEYS.md has the links.
