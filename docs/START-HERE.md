@@ -44,6 +44,7 @@ Claude on the free plan opens WEB LINKS, not names like "imetrobert/REPO, docs/F
 | Yearly tax update (3 planners) | this repo: `docs/JANUARY-CHECKLIST.md`, then each planner's `docs/common-edits.md` recipe 1 | Recipe 1, not 9 |
 | Small planner feature or fix | the planner repo: CLAUDE.md, `docs/common-edits.md` recipe 9 | |
 | Planner compare / stress-test tools, one-page summary, text size, life-event presets (same code in all 3 planners) | the planner repo: CLAUDE.md, `docs/common-edits.md` recipe 16 (`grep -n "COMPARE AND STRESS-TEST TOOLS" index.html`) | Fix or change it in all three; test: `python3 scripts/test_planning_tools.py` |
+| Planner Monte Carlo results: the "This run" box, Re-run another scenario, and the "Judge the plan by" on-track toggle (same code in all 3 planners) | the planner repo: CLAUDE.md, `docs/common-edits.md` recipe 17 (`grep -n "mcRunBannerHtml\|mcSetJudge" index.html`); test `python3 scripts/test_mc_run.py` | Display only; never change `runMonteCarlo` maths for this. Quebec: French entries too |
 | Spam, keys, accounts, DNS | `docs/KEYS.md` | Sign-ins are Robert's to click |
 
 All share ONE Supabase project and one login. Who can open what is set at access.imetrobert.com.
