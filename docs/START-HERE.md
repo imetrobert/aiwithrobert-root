@@ -43,6 +43,7 @@ Claude on the free plan opens WEB LINKS, not names like "imetrobert/REPO, docs/F
 | Blog run failed | `imetrobert.github.io`: `docs/DIAGNOSE.md`, the Step 2 error-code table (top of the file) | Read the first 40 lines only |
 | Yearly tax update (3 planners) | this repo: `docs/JANUARY-CHECKLIST.md`, then each planner's `docs/common-edits.md` recipe 1 | Recipe 1, not 9 |
 | Small planner feature or fix | the planner repo: CLAUDE.md, `docs/common-edits.md` recipe 9 | |
+| Planner compare / stress-test tools, one-page summary, text size, life-event presets (same code in all 3 planners) | the planner repo: CLAUDE.md, `docs/common-edits.md` recipe 16 (`grep -n "COMPARE AND STRESS-TEST TOOLS" index.html`) | Fix or change it in all three; test: `python3 scripts/test_planning_tools.py` |
 | Spam, keys, accounts, DNS | `docs/KEYS.md` | Sign-ins are Robert's to click |
 
 All share ONE Supabase project and one login. Who can open what is set at access.imetrobert.com.
