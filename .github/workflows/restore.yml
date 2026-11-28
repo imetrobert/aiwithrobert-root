@@ -31,7 +31,7 @@ jobs:
     steps:
       - name: Confirm
         run: '[ "${{ inputs.confirm }}" = "RESTORE" ] || { echo "::error::Type RESTORE exactly to confirm."; exit 1; }'
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Download and decrypt the backup
         run: |
           gh run download "${{ inputs.run_id }}" --repo "${{ github.repository }}" -n supabase-backup-encrypted -D dl
