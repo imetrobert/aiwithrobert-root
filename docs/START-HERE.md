@@ -63,6 +63,13 @@ All share ONE Supabase project and one login. Who can open what is set at access
 - **1st and 15th: Keepalive commit** (workflow `keepalive-commit.yml` in the hub, seniors, business, toolkit, ETF, marketplace, the three retirement planners, the invoicing app, and `keepalive.yml` in the blog). One tiny bot commit so GitHub never switches off a repo's scheduled jobs after 60 days with no commits (all repos are public). Nothing to do. If a scheduled job ever stops firing, run this workflow by hand from Actions, then re-enable the scheduled workflow if GitHub shows it as disabled.
 - Blog: Actions > Blog health report; Pipeline health page on the review page; `docs/DIAGNOSE.md` in the blog repo.
 
+## Tool versions (upgraded 28 Nov 2026; do not re-do these)
+Invoicing, jobs and ETF run **React 19, Vite 8 and plugin-react 6**; the blog's workflows run **Python 3.13**; ETF reads PDFs with **pdfjs-dist 6** and screenshots with **tesseract.js 7**. Each was one pull request with a build check and a browser test, so one tap on **Revert** on that merged PR undoes it.
+- **Left on purpose:** `@emailjs/browser` stays on **v4** in the invoicing app (v5 exists, no end-of-support date found, and a real send cannot be tested). Dependabot ignores major npm updates, so none of these will pop up as a pull request. Re-check only if EmailJS announces an end date.
+- **Two checks run on every pull request** in the app repos (`pr-build.yml` / the Checks workflow), so a green PR means it builds. A red "Commit the code map" step on a push is only a race between two quick merges and fixes itself on the next push.
+- **ETF test quirk:** `npm test` shows one failure for the 9.5-month pension contribution figure ($1 off) when run in Toronto time; it passes in UTC, which is what CI uses. Not a live bug.
+- **Not yet confirmed on a phone:** a real Manulife statement PDF and a real pension screenshot on the ETF Import and Pension pages after the pdfjs/tesseract upgrade. If either fails, Revert PR #35 in `tsx-etf-signal-notifier`.
+
 ## Once a year
 `docs/JANUARY-CHECKLIST.md`: the new tax numbers for the three retirement planners (and the few other yearly renewals). The health check goes red from 1 January until it is done.
 
