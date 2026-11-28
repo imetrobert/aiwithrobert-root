@@ -50,3 +50,5 @@ Traffic tags and what reads them: see the Business repo's CLAUDE.md ("Traffic fr
 - `imetrobert/aiwithrobert-biz` → biz.aiwithrobert.com
 - `imetrobert/imetrobert.github.io` → www.imetrobert.com (personal site + monthly blog)
 - Email lives at Name Services (forwarding to Gmail); DNS stays there.
+
+If something breaks (red check, failed run, no access): `docs/if-something-breaks.md` (open it first).
