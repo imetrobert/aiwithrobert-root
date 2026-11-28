@@ -36,7 +36,7 @@ jobs:
           rm -rf dump backup.tar.gz
           ls -l backup-*.gpg
       - name: Keep it for 90 days
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: supabase-backup-encrypted
           path: backup-*.tar.gz.gpg
