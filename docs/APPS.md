@@ -39,3 +39,7 @@ Monday health check, Sunday encrypted backup, monthly dependency updates, the bl
 
 ## QR code for talks and print
 `img/qr-feasibility-talk.png` (navy on white, 1 inch minimum when printed) opens the Business site's free feasibility check; the visit is saved on the lead as `qr/talk` and shown in the toolkit's "Where leads come from". For a different event, regenerate with another `utm_campaign` (python `qrcode` package: URL `https://biz.aiwithrobert.com/?utm_source=qr&utm_medium=print&utm_campaign=<event>#feas-check`).
+
+## App icons (bookmarks and Home Screen)
+Original icon per personal app, one colour + one symbol: ETF tracker green bars, Job Match indigo briefcase, Claims Tracker teal receipt, Marketplace generator orange price tag, Personal retirement planner navy sunrise. Source of truth: `scripts/build_app_icons.py` (colours and symbols in `APPS`), output and a preview sheet in `img/app-icons/`. Each app repo holds its own copy (`favicon.svg`, `favicon-32.png`, `apple-touch-icon.png`, in `public/` for the Vite apps ETF and Job Match) with the link tags in `index.html`.
+To change an icon: edit `APPS`, run `python3 scripts/build_app_icons.py` (needs `rsvg-convert`), copy that app's three files into its repo, commit. On an iPhone, delete the old Home Screen icon and add it again (iOS caches the old one). Not covered: the Quebec/Ontario planners, toolkit, invoicing and access page (they have their own icons or brand logos).
