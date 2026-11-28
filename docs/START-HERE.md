@@ -116,7 +116,7 @@ the "Two files, two jobs" section of CLAUDE.md first. The Quebec and Ontario cop
 
 **Someone new needs access**: access.imetrobert.com > invite. If the invite email shows a wrong app link, the app list is in
 `Supabase-platform-` (docs/index.html, docs/invite.html) and the invite function (migration/invite_user.sql, run by hand).
-A person who never accepted can be sent a fresh invitation from their card ("Resend invitation"); the app list also lives in migration/resend_invite.sql (four copies in all; see COMMON-EDITS.md in that repo).
+A person who never accepted can be sent a fresh invitation from their card ("Resend invitation"); the app list also lives in migration/resend_invite.sql (four copies in all; see COMMON-EDITS.md in that repo). If it says Supabase's email limit was reached, that is Supabase's hourly auth-email cap (nothing was sent): wait an hour and try one person; recipe in the same file.
 
 ## What free Claude cannot do (say so quickly instead of trying)
 - It may not remember earlier chats: always open with the START-HERE opener and name the repo, the one file and the error. The opener is: "Read docs/START-HERE.md in imetrobert/aiwithrobert-root first (link: https://raw.githubusercontent.com/imetrobert/aiwithrobert-root/main/docs/START-HERE.md). Then read FILE in imetrobert/REPO. Then TASK. Do not read anything else." (Capitals are what Robert fills in.)
