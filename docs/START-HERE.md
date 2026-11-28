@@ -45,6 +45,7 @@ Claude on the free plan opens WEB LINKS, not names like "imetrobert/REPO, docs/F
 | Small planner feature or fix | the planner repo: CLAUDE.md, `docs/common-edits.md` recipe 9 | |
 | Planner compare / stress-test tools, one-page summary, text size, life-event presets (same code in all 3 planners) | the planner repo: CLAUDE.md, `docs/common-edits.md` recipe 16 (`grep -n "COMPARE AND STRESS-TEST TOOLS" index.html`) | Fix or change it in all three; test: `python3 scripts/test_planning_tools.py` |
 | Planner Monte Carlo results: the "This run" box, Re-run another scenario, and the "Judge the plan by" on-track toggle (same code in all 3 planners) | the planner repo: CLAUDE.md, `docs/common-edits.md` recipe 17 (`grep -n "mcRunBannerHtml\|mcSetJudge" index.html`); test `python3 scripts/test_mc_run.py` | Display only; never change `runMonteCarlo` maths for this. Quebec: French entries too |
+| Planner "sell your home" option (downsize or rent, proceeds into TFSA / non-registered; same code in all 3 planners) | the planner repo: CLAUDE.md, `docs/common-edits.md` recipe 18 (`grep -n "hsNetProceeds\|homeSaleCard" index.html`); test `python3 scripts/test_home_sale.py` | Per person (couple: one form only). Never add tax to the sale: principal residence. Quebec: French entries too |
 | Spam, keys, accounts, DNS | `docs/KEYS.md` | Sign-ins are Robert's to click |
 
 All share ONE Supabase project and one login. Who can open what is set at access.imetrobert.com.
